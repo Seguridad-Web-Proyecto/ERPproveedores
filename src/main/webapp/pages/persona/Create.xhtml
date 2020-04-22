@@ -15,6 +15,8 @@
             </h:panelGroup>
             <h:form>
                 <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.CreatePersonaLabel_personaid}" for="personaid" />
+                    <h:inputText id="personaid" value="#{personaController.selected.personaid}" title="#{bundle.CreatePersonaTitle_personaid}" required="true" requiredMessage="#{bundle.CreatePersonaRequiredMessage_personaid}"/>
                     <h:outputLabel value="#{bundle.CreatePersonaLabel_nombres}" for="nombres" />
                     <h:inputText id="nombres" value="#{personaController.selected.nombres}" title="#{bundle.CreatePersonaTitle_nombres}" required="true" requiredMessage="#{bundle.CreatePersonaRequiredMessage_nombres}"/>
                     <h:outputLabel value="#{bundle.CreatePersonaLabel_apellidos}" for="apellidos" />
@@ -35,6 +37,10 @@
                     <h:inputText id="sexo" value="#{personaController.selected.sexo}" title="#{bundle.CreatePersonaTitle_sexo}" required="true" requiredMessage="#{bundle.CreatePersonaRequiredMessage_sexo}"/>
                     <h:outputLabel value="#{bundle.CreatePersonaLabel_residencia}" for="residencia" />
                     <h:inputText id="residencia" value="#{personaController.selected.residencia}" title="#{bundle.CreatePersonaTitle_residencia}" required="true" requiredMessage="#{bundle.CreatePersonaRequiredMessage_residencia}"/>
+                    <h:outputLabel value="#{bundle.CreatePersonaLabel_empleado}" for="empleado" />
+                    <h:selectOneMenu id="empleado" value="#{personaController.selected.empleado}" title="#{bundle.CreatePersonaTitle_empleado}" >
+                        <f:selectItems value="#{empleadoController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
                 </h:panelGrid>
                 <br />
                 <h:commandLink action="#{personaController.create}" value="#{bundle.CreatePersonaSaveLink}" />

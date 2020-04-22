@@ -15,12 +15,18 @@
             </h:panelGroup>
             <h:form>
                 <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.CreateUsuarioLabel_usuarioid}" for="usuarioid" />
+                    <h:inputText id="usuarioid" value="#{usuarioController.selected.usuarioid}" title="#{bundle.CreateUsuarioTitle_usuarioid}" required="true" requiredMessage="#{bundle.CreateUsuarioRequiredMessage_usuarioid}"/>
                     <h:outputLabel value="#{bundle.CreateUsuarioLabel_usuario}" for="usuario" />
                     <h:inputText id="usuario" value="#{usuarioController.selected.usuario}" title="#{bundle.CreateUsuarioTitle_usuario}" required="true" requiredMessage="#{bundle.CreateUsuarioRequiredMessage_usuario}"/>
                     <h:outputLabel value="#{bundle.CreateUsuarioLabel_contrasenia}" for="contrasenia" />
-                    <h:inputSecret id="contrasenia" value="#{usuarioController.selected.contrasenia}" title="#{bundle.CreateUsuarioTitle_contrasenia}" required="true" requiredMessage="#{bundle.CreateUsuarioRequiredMessage_contrasenia}"/>
+                    <h:inputText id="contrasenia" value="#{usuarioController.selected.contrasenia}" title="#{bundle.CreateUsuarioTitle_contrasenia}" required="true" requiredMessage="#{bundle.CreateUsuarioRequiredMessage_contrasenia}"/>
                     <h:outputLabel value="#{bundle.CreateUsuarioLabel_activo}" for="activo" />
                     <h:inputText id="activo" value="#{usuarioController.selected.activo}" title="#{bundle.CreateUsuarioTitle_activo}" required="true" requiredMessage="#{bundle.CreateUsuarioRequiredMessage_activo}"/>
+                    <h:outputLabel value="#{bundle.CreateUsuarioLabel_fechaCreacion}" for="fechaCreacion" />
+                    <h:inputText id="fechaCreacion" value="#{usuarioController.selected.fechaCreacion}" title="#{bundle.CreateUsuarioTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.CreateUsuarioRequiredMessage_fechaCreacion}">
+                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                    </h:inputText>
                     <h:outputLabel value="#{bundle.CreateUsuarioLabel_rolid}" for="rolid" />
                     <h:selectOneMenu id="rolid" value="#{usuarioController.selected.rolid}" title="#{bundle.CreateUsuarioTitle_rolid}" required="true" requiredMessage="#{bundle.CreateUsuarioRequiredMessage_rolid}">
                         <f:selectItems value="#{rolController.itemsAvailableSelectOne}"/>
