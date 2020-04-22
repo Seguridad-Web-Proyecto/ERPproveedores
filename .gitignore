@@ -47,3 +47,6 @@ nb-configuration.xml
 release.properties
 pom.xml.releaseBackup
 pom.xml.tag
+
+# documento de la base de datos
+src/main/webapp/WEB-INF/glassfish-resources.xml

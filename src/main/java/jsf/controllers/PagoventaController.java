@@ -1,9 +1,9 @@
-package jsf.clas;
+package jsf.controllers;
 
-import entidad.Rol;
+import entidad.Pagoventa;
 import jsf.clas.util.JsfUtil;
 import jsf.clas.util.PaginationHelper;
-import bean.sesion.RolFacade;
+import bean.sesion.PagoventaFacade;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
@@ -18,29 +18,29 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
-@Named("rolController")
+@Named("pagoventaController")
 @SessionScoped
-public class RolController implements Serializable {
+public class PagoventaController implements Serializable {
 
-    private Rol current;
+    private Pagoventa current;
     private DataModel items = null;
     @EJB
-    private bean.sesion.RolFacade ejbFacade;
+    private bean.sesion.PagoventaFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
-    public RolController() {
+    public PagoventaController() {
     }
 
-    public Rol getSelected() {
+    public Pagoventa getSelected() {
         if (current == null) {
-            current = new Rol();
+            current = new Pagoventa();
             selectedItemIndex = -1;
         }
         return current;
     }
 
-    private RolFacade getFacade() {
+    private PagoventaFacade getFacade() {
         return ejbFacade;
     }
 
@@ -68,13 +68,13 @@ public class RolController implements Serializable {
     }
 
     public String prepareView() {
-        current = (Rol) getItems().getRowData();
+        current = (Pagoventa) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "View";
     }
 
     public String prepareCreate() {
-        current = new Rol();
+        current = new Pagoventa();
         selectedItemIndex = -1;
         return "Create";
     }
@@ -82,7 +82,7 @@ public class RolController implements Serializable {
     public String create() {
         try {
             getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("RolCreated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("PagoventaCreated"));
             return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -91,7 +91,7 @@ public class RolController implements Serializable {
     }
 
     public String prepareEdit() {
-        current = (Rol) getItems().getRowData();
+        current = (Pagoventa) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "Edit";
     }
@@ -99,7 +99,7 @@ public class RolController implements Serializable {
     public String update() {
         try {
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("RolUpdated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("PagoventaUpdated"));
             return "View";
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -108,7 +108,7 @@ public class RolController implements Serializable {
     }
 
     public String destroy() {
-        current = (Rol) getItems().getRowData();
+        current = (Pagoventa) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
@@ -132,7 +132,7 @@ public class RolController implements Serializable {
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("RolDeleted"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("PagoventaDeleted"));
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
         }
@@ -188,30 +188,30 @@ public class RolController implements Serializable {
         return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
     }
 
-    public Rol getRol(java.lang.Integer id) {
+    public Pagoventa getPagoventa(java.lang.Long id) {
         return ejbFacade.find(id);
     }
 
-    @FacesConverter(forClass = Rol.class)
-    public static class RolControllerConverter implements Converter {
+    @FacesConverter(forClass = Pagoventa.class)
+    public static class PagoventaControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            RolController controller = (RolController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "rolController");
-            return controller.getRol(getKey(value));
+            PagoventaController controller = (PagoventaController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "pagoventaController");
+            return controller.getPagoventa(getKey(value));
         }
 
-        java.lang.Integer getKey(String value) {
-            java.lang.Integer key;
-            key = Integer.valueOf(value);
+        java.lang.Long getKey(String value) {
+            java.lang.Long key;
+            key = Long.valueOf(value);
             return key;
         }
 
-        String getStringKey(java.lang.Integer value) {
+        String getStringKey(java.lang.Long value) {
             StringBuilder sb = new StringBuilder();
             sb.append(value);
             return sb.toString();
@@ -222,11 +222,11 @@ public class RolController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Rol) {
-                Rol o = (Rol) object;
-                return getStringKey(o.getRolid());
+            if (object instanceof Pagoventa) {
+                Pagoventa o = (Pagoventa) object;
+                return getStringKey(o.getPagoventaid());
             } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Rol.class.getName());
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Pagoventa.class.getName());
             }
         }
 

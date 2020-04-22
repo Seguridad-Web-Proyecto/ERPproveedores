@@ -1,9 +1,9 @@
-package jsf.clas;
+package jsf.controllers;
 
-import entidad.Empleado;
+import entidad.Facturacompra;
 import jsf.clas.util.JsfUtil;
 import jsf.clas.util.PaginationHelper;
-import bean.sesion.EmpleadoFacade;
+import bean.sesion.FacturacompraFacade;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
@@ -18,29 +18,29 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
-@Named("empleadoController")
+@Named("facturacompraController")
 @SessionScoped
-public class EmpleadoController implements Serializable {
+public class FacturacompraController implements Serializable {
 
-    private Empleado current;
+    private Facturacompra current;
     private DataModel items = null;
     @EJB
-    private bean.sesion.EmpleadoFacade ejbFacade;
+    private bean.sesion.FacturacompraFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
-    public EmpleadoController() {
+    public FacturacompraController() {
     }
 
-    public Empleado getSelected() {
+    public Facturacompra getSelected() {
         if (current == null) {
-            current = new Empleado();
+            current = new Facturacompra();
             selectedItemIndex = -1;
         }
         return current;
     }
 
-    private EmpleadoFacade getFacade() {
+    private FacturacompraFacade getFacade() {
         return ejbFacade;
     }
 
@@ -68,13 +68,13 @@ public class EmpleadoController implements Serializable {
     }
 
     public String prepareView() {
-        current = (Empleado) getItems().getRowData();
+        current = (Facturacompra) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "View";
     }
 
     public String prepareCreate() {
-        current = new Empleado();
+        current = new Facturacompra();
         selectedItemIndex = -1;
         return "Create";
     }
@@ -82,7 +82,7 @@ public class EmpleadoController implements Serializable {
     public String create() {
         try {
             getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EmpleadoCreated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("FacturacompraCreated"));
             return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -91,7 +91,7 @@ public class EmpleadoController implements Serializable {
     }
 
     public String prepareEdit() {
-        current = (Empleado) getItems().getRowData();
+        current = (Facturacompra) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "Edit";
     }
@@ -99,7 +99,7 @@ public class EmpleadoController implements Serializable {
     public String update() {
         try {
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EmpleadoUpdated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("FacturacompraUpdated"));
             return "View";
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -108,7 +108,7 @@ public class EmpleadoController implements Serializable {
     }
 
     public String destroy() {
-        current = (Empleado) getItems().getRowData();
+        current = (Facturacompra) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
@@ -132,7 +132,7 @@ public class EmpleadoController implements Serializable {
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EmpleadoDeleted"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("FacturacompraDeleted"));
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
         }
@@ -188,21 +188,21 @@ public class EmpleadoController implements Serializable {
         return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
     }
 
-    public Empleado getEmpleado(java.lang.Long id) {
+    public Facturacompra getFacturacompra(java.lang.Long id) {
         return ejbFacade.find(id);
     }
 
-    @FacesConverter(forClass = Empleado.class)
-    public static class EmpleadoControllerConverter implements Converter {
+    @FacesConverter(forClass = Facturacompra.class)
+    public static class FacturacompraControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            EmpleadoController controller = (EmpleadoController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "empleadoController");
-            return controller.getEmpleado(getKey(value));
+            FacturacompraController controller = (FacturacompraController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "facturacompraController");
+            return controller.getFacturacompra(getKey(value));
         }
 
         java.lang.Long getKey(String value) {
@@ -222,11 +222,11 @@ public class EmpleadoController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Empleado) {
-                Empleado o = (Empleado) object;
-                return getStringKey(o.getEmpleadoid());
+            if (object instanceof Facturacompra) {
+                Facturacompra o = (Facturacompra) object;
+                return getStringKey(o.getFacturacompraid());
             } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Empleado.class.getName());
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Facturacompra.class.getName());
             }
         }
 

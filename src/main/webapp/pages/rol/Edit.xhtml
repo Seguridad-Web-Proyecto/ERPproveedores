@@ -16,7 +16,7 @@
             <h:form>
                 <h:panelGrid columns="2">
                     <h:outputLabel value="#{bundle.EditRolLabel_rolid}" for="rolid" />
-                    <h:inputText id="rolid" value="#{rolController.selected.rolid}" title="#{bundle.EditRolTitle_rolid}" required="true" requiredMessage="#{bundle.EditRolRequiredMessage_rolid}"/>
+                    <h:outputLabel id="rolid" value="#{rolController.selected.rolid}" title="#{bundle.EditRolTitle_rolid}"/>
                     <h:outputLabel value="#{bundle.EditRolLabel_nombre}" for="nombre" />
                     <h:inputText id="nombre" value="#{rolController.selected.nombre}" title="#{bundle.EditRolTitle_nombre}" required="true" requiredMessage="#{bundle.EditRolRequiredMessage_nombre}"/>
                 </h:panelGrid>

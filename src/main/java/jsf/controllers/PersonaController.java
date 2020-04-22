@@ -1,9 +1,9 @@
-package jsf.clas;
+package jsf.controllers;
 
-import entidad.Proveedor;
+import entidad.Persona;
 import jsf.clas.util.JsfUtil;
 import jsf.clas.util.PaginationHelper;
-import bean.sesion.ProveedorFacade;
+import bean.sesion.PersonaFacade;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
@@ -18,29 +18,29 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
-@Named("proveedorController")
+@Named("personaController")
 @SessionScoped
-public class ProveedorController implements Serializable {
+public class PersonaController implements Serializable {
 
-    private Proveedor current;
+    private Persona current;
     private DataModel items = null;
     @EJB
-    private bean.sesion.ProveedorFacade ejbFacade;
+    private bean.sesion.PersonaFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
-    public ProveedorController() {
+    public PersonaController() {
     }
 
-    public Proveedor getSelected() {
+    public Persona getSelected() {
         if (current == null) {
-            current = new Proveedor();
+            current = new Persona();
             selectedItemIndex = -1;
         }
         return current;
     }
 
-    private ProveedorFacade getFacade() {
+    private PersonaFacade getFacade() {
         return ejbFacade;
     }
 
@@ -68,13 +68,13 @@ public class ProveedorController implements Serializable {
     }
 
     public String prepareView() {
-        current = (Proveedor) getItems().getRowData();
+        current = (Persona) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "View";
     }
 
     public String prepareCreate() {
-        current = new Proveedor();
+        current = new Persona();
         selectedItemIndex = -1;
         return "Create";
     }
@@ -82,7 +82,7 @@ public class ProveedorController implements Serializable {
     public String create() {
         try {
             getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ProveedorCreated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("PersonaCreated"));
             return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -91,7 +91,7 @@ public class ProveedorController implements Serializable {
     }
 
     public String prepareEdit() {
-        current = (Proveedor) getItems().getRowData();
+        current = (Persona) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "Edit";
     }
@@ -99,7 +99,7 @@ public class ProveedorController implements Serializable {
     public String update() {
         try {
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ProveedorUpdated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("PersonaUpdated"));
             return "View";
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -108,7 +108,7 @@ public class ProveedorController implements Serializable {
     }
 
     public String destroy() {
-        current = (Proveedor) getItems().getRowData();
+        current = (Persona) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
@@ -132,7 +132,7 @@ public class ProveedorController implements Serializable {
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ProveedorDeleted"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("PersonaDeleted"));
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
         }
@@ -188,21 +188,21 @@ public class ProveedorController implements Serializable {
         return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
     }
 
-    public Proveedor getProveedor(java.lang.Long id) {
+    public Persona getPersona(java.lang.Long id) {
         return ejbFacade.find(id);
     }
 
-    @FacesConverter(forClass = Proveedor.class)
-    public static class ProveedorControllerConverter implements Converter {
+    @FacesConverter(forClass = Persona.class)
+    public static class PersonaControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            ProveedorController controller = (ProveedorController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "proveedorController");
-            return controller.getProveedor(getKey(value));
+            PersonaController controller = (PersonaController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "personaController");
+            return controller.getPersona(getKey(value));
         }
 
         java.lang.Long getKey(String value) {
@@ -222,11 +222,11 @@ public class ProveedorController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Proveedor) {
-                Proveedor o = (Proveedor) object;
-                return getStringKey(o.getProveedorid());
+            if (object instanceof Persona) {
+                Persona o = (Persona) object;
+                return getStringKey(o.getPersonaid());
             } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Proveedor.class.getName());
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Persona.class.getName());
             }
         }
 

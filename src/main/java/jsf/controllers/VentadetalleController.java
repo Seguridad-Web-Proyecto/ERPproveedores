@@ -1,9 +1,9 @@
-package jsf.clas;
+package jsf.controllers;
 
-import entidad.Usuariosw;
+import entidad.Ventadetalle;
 import jsf.clas.util.JsfUtil;
 import jsf.clas.util.PaginationHelper;
-import bean.sesion.UsuarioswFacade;
+import bean.sesion.VentadetalleFacade;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
@@ -18,29 +18,30 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
-@Named("usuarioswController")
+@Named("ventadetalleController")
 @SessionScoped
-public class UsuarioswController implements Serializable {
+public class VentadetalleController implements Serializable {
 
-    private Usuariosw current;
+    private Ventadetalle current;
     private DataModel items = null;
     @EJB
-    private bean.sesion.UsuarioswFacade ejbFacade;
+    private bean.sesion.VentadetalleFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
-    public UsuarioswController() {
+    public VentadetalleController() {
     }
 
-    public Usuariosw getSelected() {
+    public Ventadetalle getSelected() {
         if (current == null) {
-            current = new Usuariosw();
+            current = new Ventadetalle();
+            current.setVentadetallePK(new entidad.VentadetallePK());
             selectedItemIndex = -1;
         }
         return current;
     }
 
-    private UsuarioswFacade getFacade() {
+    private VentadetalleFacade getFacade() {
         return ejbFacade;
     }
 
@@ -68,21 +69,24 @@ public class UsuarioswController implements Serializable {
     }
 
     public String prepareView() {
-        current = (Usuariosw) getItems().getRowData();
+        current = (Ventadetalle) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "View";
     }
 
     public String prepareCreate() {
-        current = new Usuariosw();
+        current = new Ventadetalle();
+        current.setVentadetallePK(new entidad.VentadetallePK());
         selectedItemIndex = -1;
         return "Create";
     }
 
     public String create() {
         try {
+            current.getVentadetallePK().setProductoid(current.getProducto().getProductoid());
+            current.getVentadetallePK().setVentaid(current.getOrdenventa().getOrdenventaid());
             getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("UsuarioswCreated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("VentadetalleCreated"));
             return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -91,15 +95,17 @@ public class UsuarioswController implements Serializable {
     }
 
     public String prepareEdit() {
-        current = (Usuariosw) getItems().getRowData();
+        current = (Ventadetalle) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "Edit";
     }
 
     public String update() {
         try {
+            current.getVentadetallePK().setProductoid(current.getProducto().getProductoid());
+            current.getVentadetallePK().setVentaid(current.getOrdenventa().getOrdenventaid());
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("UsuarioswUpdated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("VentadetalleUpdated"));
             return "View";
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -108,7 +114,7 @@ public class UsuarioswController implements Serializable {
     }
 
     public String destroy() {
-        current = (Usuariosw) getItems().getRowData();
+        current = (Ventadetalle) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
@@ -132,7 +138,7 @@ public class UsuarioswController implements Serializable {
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("UsuarioswDeleted"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("VentadetalleDeleted"));
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
         }
@@ -188,32 +194,40 @@ public class UsuarioswController implements Serializable {
         return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
     }
 
-    public Usuariosw getUsuariosw(java.lang.Long id) {
+    public Ventadetalle getVentadetalle(entidad.VentadetallePK id) {
         return ejbFacade.find(id);
     }
 
-    @FacesConverter(forClass = Usuariosw.class)
-    public static class UsuarioswControllerConverter implements Converter {
+    @FacesConverter(forClass = Ventadetalle.class)
+    public static class VentadetalleControllerConverter implements Converter {
+
+        private static final String SEPARATOR = "#";
+        private static final String SEPARATOR_ESCAPED = "\\#";
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            UsuarioswController controller = (UsuarioswController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "usuarioswController");
-            return controller.getUsuariosw(getKey(value));
+            VentadetalleController controller = (VentadetalleController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "ventadetalleController");
+            return controller.getVentadetalle(getKey(value));
         }
 
-        java.lang.Long getKey(String value) {
-            java.lang.Long key;
-            key = Long.valueOf(value);
+        entidad.VentadetallePK getKey(String value) {
+            entidad.VentadetallePK key;
+            String values[] = value.split(SEPARATOR_ESCAPED);
+            key = new entidad.VentadetallePK();
+            key.setVentaid(Long.parseLong(values[0]));
+            key.setProductoid(Long.parseLong(values[1]));
             return key;
         }
 
-        String getStringKey(java.lang.Long value) {
+        String getStringKey(entidad.VentadetallePK value) {
             StringBuilder sb = new StringBuilder();
-            sb.append(value);
+            sb.append(value.getVentaid());
+            sb.append(SEPARATOR);
+            sb.append(value.getProductoid());
             return sb.toString();
         }
 
@@ -222,11 +236,11 @@ public class UsuarioswController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Usuariosw) {
-                Usuariosw o = (Usuariosw) object;
-                return getStringKey(o.getUsuarioid());
+            if (object instanceof Ventadetalle) {
+                Ventadetalle o = (Ventadetalle) object;
+                return getStringKey(o.getVentadetallePK());
             } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Usuariosw.class.getName());
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Ventadetalle.class.getName());
             }
         }
 

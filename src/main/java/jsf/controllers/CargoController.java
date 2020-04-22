@@ -1,9 +1,9 @@
-package jsf.clas;
+package jsf.controllers;
 
-import entidad.Persona;
+import entidad.Cargo;
 import jsf.clas.util.JsfUtil;
 import jsf.clas.util.PaginationHelper;
-import bean.sesion.PersonaFacade;
+import bean.sesion.CargoFacade;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
@@ -18,29 +18,29 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
-@Named("personaController")
+@Named("cargoController")
 @SessionScoped
-public class PersonaController implements Serializable {
+public class CargoController implements Serializable {
 
-    private Persona current;
+    private Cargo current;
     private DataModel items = null;
     @EJB
-    private bean.sesion.PersonaFacade ejbFacade;
+    private bean.sesion.CargoFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
-    public PersonaController() {
+    public CargoController() {
     }
 
-    public Persona getSelected() {
+    public Cargo getSelected() {
         if (current == null) {
-            current = new Persona();
+            current = new Cargo();
             selectedItemIndex = -1;
         }
         return current;
     }
 
-    private PersonaFacade getFacade() {
+    private CargoFacade getFacade() {
         return ejbFacade;
     }
 
@@ -68,13 +68,13 @@ public class PersonaController implements Serializable {
     }
 
     public String prepareView() {
-        current = (Persona) getItems().getRowData();
+        current = (Cargo) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "View";
     }
 
     public String prepareCreate() {
-        current = new Persona();
+        current = new Cargo();
         selectedItemIndex = -1;
         return "Create";
     }
@@ -82,7 +82,7 @@ public class PersonaController implements Serializable {
     public String create() {
         try {
             getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("PersonaCreated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("CargoCreated"));
             return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -91,7 +91,7 @@ public class PersonaController implements Serializable {
     }
 
     public String prepareEdit() {
-        current = (Persona) getItems().getRowData();
+        current = (Cargo) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "Edit";
     }
@@ -99,7 +99,7 @@ public class PersonaController implements Serializable {
     public String update() {
         try {
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("PersonaUpdated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("CargoUpdated"));
             return "View";
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -108,7 +108,7 @@ public class PersonaController implements Serializable {
     }
 
     public String destroy() {
-        current = (Persona) getItems().getRowData();
+        current = (Cargo) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
@@ -132,7 +132,7 @@ public class PersonaController implements Serializable {
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("PersonaDeleted"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("CargoDeleted"));
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
         }
@@ -188,21 +188,21 @@ public class PersonaController implements Serializable {
         return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
     }
 
-    public Persona getPersona(java.lang.Long id) {
+    public Cargo getCargo(java.lang.Long id) {
         return ejbFacade.find(id);
     }
 
-    @FacesConverter(forClass = Persona.class)
-    public static class PersonaControllerConverter implements Converter {
+    @FacesConverter(forClass = Cargo.class)
+    public static class CargoControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            PersonaController controller = (PersonaController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "personaController");
-            return controller.getPersona(getKey(value));
+            CargoController controller = (CargoController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "cargoController");
+            return controller.getCargo(getKey(value));
         }
 
         java.lang.Long getKey(String value) {
@@ -222,11 +222,11 @@ public class PersonaController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Persona) {
-                Persona o = (Persona) object;
-                return getStringKey(o.getPersonaid());
+            if (object instanceof Cargo) {
+                Cargo o = (Cargo) object;
+                return getStringKey(o.getCargoid());
             } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Persona.class.getName());
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Cargo.class.getName());
             }
         }
 

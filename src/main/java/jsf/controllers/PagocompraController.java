@@ -1,9 +1,9 @@
-package jsf.clas;
+package jsf.controllers;
 
-import entidad.Historialtrabajo;
+import entidad.Pagocompra;
 import jsf.clas.util.JsfUtil;
 import jsf.clas.util.PaginationHelper;
-import bean.sesion.HistorialtrabajoFacade;
+import bean.sesion.PagocompraFacade;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
@@ -18,29 +18,29 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
-@Named("historialtrabajoController")
+@Named("pagocompraController")
 @SessionScoped
-public class HistorialtrabajoController implements Serializable {
+public class PagocompraController implements Serializable {
 
-    private Historialtrabajo current;
+    private Pagocompra current;
     private DataModel items = null;
     @EJB
-    private bean.sesion.HistorialtrabajoFacade ejbFacade;
+    private bean.sesion.PagocompraFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
-    public HistorialtrabajoController() {
+    public PagocompraController() {
     }
 
-    public Historialtrabajo getSelected() {
+    public Pagocompra getSelected() {
         if (current == null) {
-            current = new Historialtrabajo();
+            current = new Pagocompra();
             selectedItemIndex = -1;
         }
         return current;
     }
 
-    private HistorialtrabajoFacade getFacade() {
+    private PagocompraFacade getFacade() {
         return ejbFacade;
     }
 
@@ -68,13 +68,13 @@ public class HistorialtrabajoController implements Serializable {
     }
 
     public String prepareView() {
-        current = (Historialtrabajo) getItems().getRowData();
+        current = (Pagocompra) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "View";
     }
 
     public String prepareCreate() {
-        current = new Historialtrabajo();
+        current = new Pagocompra();
         selectedItemIndex = -1;
         return "Create";
     }
@@ -82,7 +82,7 @@ public class HistorialtrabajoController implements Serializable {
     public String create() {
         try {
             getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("HistorialtrabajoCreated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("PagocompraCreated"));
             return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -91,7 +91,7 @@ public class HistorialtrabajoController implements Serializable {
     }
 
     public String prepareEdit() {
-        current = (Historialtrabajo) getItems().getRowData();
+        current = (Pagocompra) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "Edit";
     }
@@ -99,7 +99,7 @@ public class HistorialtrabajoController implements Serializable {
     public String update() {
         try {
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("HistorialtrabajoUpdated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("PagocompraUpdated"));
             return "View";
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -108,7 +108,7 @@ public class HistorialtrabajoController implements Serializable {
     }
 
     public String destroy() {
-        current = (Historialtrabajo) getItems().getRowData();
+        current = (Pagocompra) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
@@ -132,7 +132,7 @@ public class HistorialtrabajoController implements Serializable {
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("HistorialtrabajoDeleted"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("PagocompraDeleted"));
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
         }
@@ -188,21 +188,21 @@ public class HistorialtrabajoController implements Serializable {
         return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
     }
 
-    public Historialtrabajo getHistorialtrabajo(java.lang.Long id) {
+    public Pagocompra getPagocompra(java.lang.Long id) {
         return ejbFacade.find(id);
     }
 
-    @FacesConverter(forClass = Historialtrabajo.class)
-    public static class HistorialtrabajoControllerConverter implements Converter {
+    @FacesConverter(forClass = Pagocompra.class)
+    public static class PagocompraControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            HistorialtrabajoController controller = (HistorialtrabajoController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "historialtrabajoController");
-            return controller.getHistorialtrabajo(getKey(value));
+            PagocompraController controller = (PagocompraController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "pagocompraController");
+            return controller.getPagocompra(getKey(value));
         }
 
         java.lang.Long getKey(String value) {
@@ -222,11 +222,11 @@ public class HistorialtrabajoController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Historialtrabajo) {
-                Historialtrabajo o = (Historialtrabajo) object;
-                return getStringKey(o.getHistorialid());
+            if (object instanceof Pagocompra) {
+                Pagocompra o = (Pagocompra) object;
+                return getStringKey(o.getPagocompraid());
             } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Historialtrabajo.class.getName());
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Pagocompra.class.getName());
             }
         }
 

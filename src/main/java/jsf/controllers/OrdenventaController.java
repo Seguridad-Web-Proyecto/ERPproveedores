@@ -1,9 +1,9 @@
-package jsf.clas;
+package jsf.controllers;
 
-import entidad.Cargo;
+import entidad.Ordenventa;
 import jsf.clas.util.JsfUtil;
 import jsf.clas.util.PaginationHelper;
-import bean.sesion.CargoFacade;
+import bean.sesion.OrdenventaFacade;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
@@ -18,29 +18,29 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
-@Named("cargoController")
+@Named("ordenventaController")
 @SessionScoped
-public class CargoController implements Serializable {
+public class OrdenventaController implements Serializable {
 
-    private Cargo current;
+    private Ordenventa current;
     private DataModel items = null;
     @EJB
-    private bean.sesion.CargoFacade ejbFacade;
+    private bean.sesion.OrdenventaFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
-    public CargoController() {
+    public OrdenventaController() {
     }
 
-    public Cargo getSelected() {
+    public Ordenventa getSelected() {
         if (current == null) {
-            current = new Cargo();
+            current = new Ordenventa();
             selectedItemIndex = -1;
         }
         return current;
     }
 
-    private CargoFacade getFacade() {
+    private OrdenventaFacade getFacade() {
         return ejbFacade;
     }
 
@@ -68,13 +68,13 @@ public class CargoController implements Serializable {
     }
 
     public String prepareView() {
-        current = (Cargo) getItems().getRowData();
+        current = (Ordenventa) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "View";
     }
 
     public String prepareCreate() {
-        current = new Cargo();
+        current = new Ordenventa();
         selectedItemIndex = -1;
         return "Create";
     }
@@ -82,7 +82,7 @@ public class CargoController implements Serializable {
     public String create() {
         try {
             getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("CargoCreated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("OrdenventaCreated"));
             return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -91,7 +91,7 @@ public class CargoController implements Serializable {
     }
 
     public String prepareEdit() {
-        current = (Cargo) getItems().getRowData();
+        current = (Ordenventa) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "Edit";
     }
@@ -99,7 +99,7 @@ public class CargoController implements Serializable {
     public String update() {
         try {
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("CargoUpdated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("OrdenventaUpdated"));
             return "View";
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -108,7 +108,7 @@ public class CargoController implements Serializable {
     }
 
     public String destroy() {
-        current = (Cargo) getItems().getRowData();
+        current = (Ordenventa) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
@@ -132,7 +132,7 @@ public class CargoController implements Serializable {
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("CargoDeleted"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("OrdenventaDeleted"));
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
         }
@@ -188,21 +188,21 @@ public class CargoController implements Serializable {
         return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
     }
 
-    public Cargo getCargo(java.lang.Long id) {
+    public Ordenventa getOrdenventa(java.lang.Long id) {
         return ejbFacade.find(id);
     }
 
-    @FacesConverter(forClass = Cargo.class)
-    public static class CargoControllerConverter implements Converter {
+    @FacesConverter(forClass = Ordenventa.class)
+    public static class OrdenventaControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            CargoController controller = (CargoController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "cargoController");
-            return controller.getCargo(getKey(value));
+            OrdenventaController controller = (OrdenventaController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "ordenventaController");
+            return controller.getOrdenventa(getKey(value));
         }
 
         java.lang.Long getKey(String value) {
@@ -222,11 +222,11 @@ public class CargoController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Cargo) {
-                Cargo o = (Cargo) object;
-                return getStringKey(o.getCargoid());
+            if (object instanceof Ordenventa) {
+                Ordenventa o = (Ordenventa) object;
+                return getStringKey(o.getOrdenventaid());
             } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Cargo.class.getName());
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Ordenventa.class.getName());
             }
         }
 

@@ -1,9 +1,9 @@
-package jsf.clas;
+package jsf.controllers;
 
-import entidad.Ordencompra;
+import entidad.Historialtrabajo;
 import jsf.clas.util.JsfUtil;
 import jsf.clas.util.PaginationHelper;
-import bean.sesion.OrdencompraFacade;
+import bean.sesion.HistorialtrabajoFacade;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
@@ -18,29 +18,29 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
-@Named("ordencompraController")
+@Named("historialtrabajoController")
 @SessionScoped
-public class OrdencompraController implements Serializable {
+public class HistorialtrabajoController implements Serializable {
 
-    private Ordencompra current;
+    private Historialtrabajo current;
     private DataModel items = null;
     @EJB
-    private bean.sesion.OrdencompraFacade ejbFacade;
+    private bean.sesion.HistorialtrabajoFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
-    public OrdencompraController() {
+    public HistorialtrabajoController() {
     }
 
-    public Ordencompra getSelected() {
+    public Historialtrabajo getSelected() {
         if (current == null) {
-            current = new Ordencompra();
+            current = new Historialtrabajo();
             selectedItemIndex = -1;
         }
         return current;
     }
 
-    private OrdencompraFacade getFacade() {
+    private HistorialtrabajoFacade getFacade() {
         return ejbFacade;
     }
 
@@ -68,13 +68,13 @@ public class OrdencompraController implements Serializable {
     }
 
     public String prepareView() {
-        current = (Ordencompra) getItems().getRowData();
+        current = (Historialtrabajo) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "View";
     }
 
     public String prepareCreate() {
-        current = new Ordencompra();
+        current = new Historialtrabajo();
         selectedItemIndex = -1;
         return "Create";
     }
@@ -82,7 +82,7 @@ public class OrdencompraController implements Serializable {
     public String create() {
         try {
             getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("OrdencompraCreated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("HistorialtrabajoCreated"));
             return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -91,7 +91,7 @@ public class OrdencompraController implements Serializable {
     }
 
     public String prepareEdit() {
-        current = (Ordencompra) getItems().getRowData();
+        current = (Historialtrabajo) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "Edit";
     }
@@ -99,7 +99,7 @@ public class OrdencompraController implements Serializable {
     public String update() {
         try {
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("OrdencompraUpdated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("HistorialtrabajoUpdated"));
             return "View";
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -108,7 +108,7 @@ public class OrdencompraController implements Serializable {
     }
 
     public String destroy() {
-        current = (Ordencompra) getItems().getRowData();
+        current = (Historialtrabajo) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
@@ -132,7 +132,7 @@ public class OrdencompraController implements Serializable {
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("OrdencompraDeleted"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("HistorialtrabajoDeleted"));
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
         }
@@ -188,21 +188,21 @@ public class OrdencompraController implements Serializable {
         return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
     }
 
-    public Ordencompra getOrdencompra(java.lang.Long id) {
+    public Historialtrabajo getHistorialtrabajo(java.lang.Long id) {
         return ejbFacade.find(id);
     }
 
-    @FacesConverter(forClass = Ordencompra.class)
-    public static class OrdencompraControllerConverter implements Converter {
+    @FacesConverter(forClass = Historialtrabajo.class)
+    public static class HistorialtrabajoControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            OrdencompraController controller = (OrdencompraController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "ordencompraController");
-            return controller.getOrdencompra(getKey(value));
+            HistorialtrabajoController controller = (HistorialtrabajoController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "historialtrabajoController");
+            return controller.getHistorialtrabajo(getKey(value));
         }
 
         java.lang.Long getKey(String value) {
@@ -222,11 +222,11 @@ public class OrdencompraController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Ordencompra) {
-                Ordencompra o = (Ordencompra) object;
-                return getStringKey(o.getOrdencompraid());
+            if (object instanceof Historialtrabajo) {
+                Historialtrabajo o = (Historialtrabajo) object;
+                return getStringKey(o.getHistorialid());
             } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Ordencompra.class.getName());
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Historialtrabajo.class.getName());
             }
         }
 

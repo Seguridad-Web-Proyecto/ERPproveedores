@@ -20,18 +20,22 @@
                     <h:outputLabel value="#{bundle.EditUsuarioLabel_usuario}" for="usuario" />
                     <h:inputText id="usuario" value="#{usuarioController.selected.usuario}" title="#{bundle.EditUsuarioTitle_usuario}" required="true" requiredMessage="#{bundle.EditUsuarioRequiredMessage_usuario}"/>
                     <h:outputLabel value="#{bundle.EditUsuarioLabel_contrasenia}" for="contrasenia" />
-                    <h:inputText id="contrasenia" value="#{usuarioController.selected.contrasenia}" title="#{bundle.EditUsuarioTitle_contrasenia}" required="true" requiredMessage="#{bundle.EditUsuarioRequiredMessage_contrasenia}"/>
+                    <h:inputSecret id="contrasenia" value="#{usuarioController.selected.contrasenia}" title="#{bundle.EditUsuarioTitle_contrasenia}" required="true" requiredMessage="#{bundle.EditUsuarioRequiredMessage_contrasenia}"/>
                     <h:outputLabel value="#{bundle.EditUsuarioLabel_activo}" for="activo" />
-                    <h:inputText id="activo" value="#{usuarioController.selected.activo}" title="#{bundle.EditUsuarioTitle_activo}" required="true" requiredMessage="#{bundle.EditUsuarioRequiredMessage_activo}"/>
+                    
+                    <h:selectOneMenu id="activo" value="#{usuarioController.selected.activo}" title="#{bundle.EditUsuarioTitle_activo}" required="true" requiredMessage="#{bundle.EditUsuarioRequiredMessage_activo}">
+                        <f:selectItems value="#{usuarioController.activoValues}"/>
+                    </h:selectOneMenu>
+                    
                     <h:outputLabel value="#{bundle.EditUsuarioLabel_fechaCreacion}" for="fechaCreacion" />
-                    <h:inputText id="fechaCreacion" value="#{usuarioController.selected.fechaCreacion}" title="#{bundle.EditUsuarioTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditUsuarioRequiredMessage_fechaCreacion}">
-                        <f:convertDateTime pattern="MM/dd/yyyy" />
-                    </h:inputText>
+                    <h:outputLabel id="fechaCreacion" value="#{usuarioController.selected.fechaCreacion}" title="#{bundle.EditUsuarioTitle_fechaCreacion}">
+                    </h:outputLabel>
                     <h:outputLabel value="#{bundle.EditUsuarioLabel_rolid}" for="rolid" />
                     <h:selectOneMenu id="rolid" value="#{usuarioController.selected.rolid}" title="#{bundle.EditUsuarioTitle_rolid}" required="true" requiredMessage="#{bundle.EditUsuarioRequiredMessage_rolid}">
                         <f:selectItems value="#{rolController.itemsAvailableSelectOne}"/>
                     </h:selectOneMenu>
                 </h:panelGrid>
+                
                 <h:commandLink action="#{usuarioController.update}" value="#{bundle.EditUsuarioSaveLink}"/>
                 <br />
                 <br />

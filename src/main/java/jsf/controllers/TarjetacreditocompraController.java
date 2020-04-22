@@ -1,9 +1,9 @@
-package jsf.clas;
+package jsf.controllers;
 
-import entidad.Facturacompra;
+import entidad.Tarjetacreditocompra;
 import jsf.clas.util.JsfUtil;
 import jsf.clas.util.PaginationHelper;
-import bean.sesion.FacturacompraFacade;
+import bean.sesion.TarjetacreditocompraFacade;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
@@ -18,29 +18,29 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
-@Named("facturacompraController")
+@Named("tarjetacreditocompraController")
 @SessionScoped
-public class FacturacompraController implements Serializable {
+public class TarjetacreditocompraController implements Serializable {
 
-    private Facturacompra current;
+    private Tarjetacreditocompra current;
     private DataModel items = null;
     @EJB
-    private bean.sesion.FacturacompraFacade ejbFacade;
+    private bean.sesion.TarjetacreditocompraFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
-    public FacturacompraController() {
+    public TarjetacreditocompraController() {
     }
 
-    public Facturacompra getSelected() {
+    public Tarjetacreditocompra getSelected() {
         if (current == null) {
-            current = new Facturacompra();
+            current = new Tarjetacreditocompra();
             selectedItemIndex = -1;
         }
         return current;
     }
 
-    private FacturacompraFacade getFacade() {
+    private TarjetacreditocompraFacade getFacade() {
         return ejbFacade;
     }
 
@@ -68,13 +68,13 @@ public class FacturacompraController implements Serializable {
     }
 
     public String prepareView() {
-        current = (Facturacompra) getItems().getRowData();
+        current = (Tarjetacreditocompra) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "View";
     }
 
     public String prepareCreate() {
-        current = new Facturacompra();
+        current = new Tarjetacreditocompra();
         selectedItemIndex = -1;
         return "Create";
     }
@@ -82,7 +82,7 @@ public class FacturacompraController implements Serializable {
     public String create() {
         try {
             getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("FacturacompraCreated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("TarjetacreditocompraCreated"));
             return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -91,7 +91,7 @@ public class FacturacompraController implements Serializable {
     }
 
     public String prepareEdit() {
-        current = (Facturacompra) getItems().getRowData();
+        current = (Tarjetacreditocompra) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "Edit";
     }
@@ -99,7 +99,7 @@ public class FacturacompraController implements Serializable {
     public String update() {
         try {
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("FacturacompraUpdated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("TarjetacreditocompraUpdated"));
             return "View";
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -108,7 +108,7 @@ public class FacturacompraController implements Serializable {
     }
 
     public String destroy() {
-        current = (Facturacompra) getItems().getRowData();
+        current = (Tarjetacreditocompra) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
@@ -132,7 +132,7 @@ public class FacturacompraController implements Serializable {
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("FacturacompraDeleted"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("TarjetacreditocompraDeleted"));
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
         }
@@ -188,21 +188,21 @@ public class FacturacompraController implements Serializable {
         return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
     }
 
-    public Facturacompra getFacturacompra(java.lang.Long id) {
+    public Tarjetacreditocompra getTarjetacreditocompra(java.lang.Long id) {
         return ejbFacade.find(id);
     }
 
-    @FacesConverter(forClass = Facturacompra.class)
-    public static class FacturacompraControllerConverter implements Converter {
+    @FacesConverter(forClass = Tarjetacreditocompra.class)
+    public static class TarjetacreditocompraControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            FacturacompraController controller = (FacturacompraController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "facturacompraController");
-            return controller.getFacturacompra(getKey(value));
+            TarjetacreditocompraController controller = (TarjetacreditocompraController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "tarjetacreditocompraController");
+            return controller.getTarjetacreditocompra(getKey(value));
         }
 
         java.lang.Long getKey(String value) {
@@ -222,11 +222,11 @@ public class FacturacompraController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Facturacompra) {
-                Facturacompra o = (Facturacompra) object;
-                return getStringKey(o.getFacturacompraid());
+            if (object instanceof Tarjetacreditocompra) {
+                Tarjetacreditocompra o = (Tarjetacreditocompra) object;
+                return getStringKey(o.getTarjetacreditocompraid());
             } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Facturacompra.class.getName());
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Tarjetacreditocompra.class.getName());
             }
         }
 

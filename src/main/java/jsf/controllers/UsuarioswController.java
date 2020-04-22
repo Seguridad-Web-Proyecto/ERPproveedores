@@ -1,9 +1,9 @@
-package jsf.clas;
+package jsf.controllers;
 
-import entidad.Pagocompra;
+import entidad.Usuariosw;
 import jsf.clas.util.JsfUtil;
 import jsf.clas.util.PaginationHelper;
-import bean.sesion.PagocompraFacade;
+import bean.sesion.UsuarioswFacade;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
@@ -18,29 +18,29 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
-@Named("pagocompraController")
+@Named("usuarioswController")
 @SessionScoped
-public class PagocompraController implements Serializable {
+public class UsuarioswController implements Serializable {
 
-    private Pagocompra current;
+    private Usuariosw current;
     private DataModel items = null;
     @EJB
-    private bean.sesion.PagocompraFacade ejbFacade;
+    private bean.sesion.UsuarioswFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
-    public PagocompraController() {
+    public UsuarioswController() {
     }
 
-    public Pagocompra getSelected() {
+    public Usuariosw getSelected() {
         if (current == null) {
-            current = new Pagocompra();
+            current = new Usuariosw();
             selectedItemIndex = -1;
         }
         return current;
     }
 
-    private PagocompraFacade getFacade() {
+    private UsuarioswFacade getFacade() {
         return ejbFacade;
     }
 
@@ -68,13 +68,13 @@ public class PagocompraController implements Serializable {
     }
 
     public String prepareView() {
-        current = (Pagocompra) getItems().getRowData();
+        current = (Usuariosw) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "View";
     }
 
     public String prepareCreate() {
-        current = new Pagocompra();
+        current = new Usuariosw();
         selectedItemIndex = -1;
         return "Create";
     }
@@ -82,7 +82,7 @@ public class PagocompraController implements Serializable {
     public String create() {
         try {
             getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("PagocompraCreated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("UsuarioswCreated"));
             return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -91,7 +91,7 @@ public class PagocompraController implements Serializable {
     }
 
     public String prepareEdit() {
-        current = (Pagocompra) getItems().getRowData();
+        current = (Usuariosw) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "Edit";
     }
@@ -99,7 +99,7 @@ public class PagocompraController implements Serializable {
     public String update() {
         try {
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("PagocompraUpdated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("UsuarioswUpdated"));
             return "View";
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -108,7 +108,7 @@ public class PagocompraController implements Serializable {
     }
 
     public String destroy() {
-        current = (Pagocompra) getItems().getRowData();
+        current = (Usuariosw) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
@@ -132,7 +132,7 @@ public class PagocompraController implements Serializable {
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("PagocompraDeleted"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("UsuarioswDeleted"));
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
         }
@@ -188,21 +188,21 @@ public class PagocompraController implements Serializable {
         return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
     }
 
-    public Pagocompra getPagocompra(java.lang.Long id) {
+    public Usuariosw getUsuariosw(java.lang.Long id) {
         return ejbFacade.find(id);
     }
 
-    @FacesConverter(forClass = Pagocompra.class)
-    public static class PagocompraControllerConverter implements Converter {
+    @FacesConverter(forClass = Usuariosw.class)
+    public static class UsuarioswControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            PagocompraController controller = (PagocompraController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "pagocompraController");
-            return controller.getPagocompra(getKey(value));
+            UsuarioswController controller = (UsuarioswController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "usuarioswController");
+            return controller.getUsuariosw(getKey(value));
         }
 
         java.lang.Long getKey(String value) {
@@ -222,11 +222,11 @@ public class PagocompraController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Pagocompra) {
-                Pagocompra o = (Pagocompra) object;
-                return getStringKey(o.getPagocompraid());
+            if (object instanceof Usuariosw) {
+                Usuariosw o = (Usuariosw) object;
+                return getStringKey(o.getUsuarioid());
             } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Pagocompra.class.getName());
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Usuariosw.class.getName());
             }
         }
 

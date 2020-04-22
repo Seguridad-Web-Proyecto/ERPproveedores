@@ -19,8 +19,6 @@
                     <h:outputText value="#{usuarioController.selected.usuarioid}" title="#{bundle.ViewUsuarioTitle_usuarioid}"/>
                     <h:outputText value="#{bundle.ViewUsuarioLabel_usuario}"/>
                     <h:outputText value="#{usuarioController.selected.usuario}" title="#{bundle.ViewUsuarioTitle_usuario}"/>
-                    <h:outputText value="#{bundle.ViewUsuarioLabel_contrasenia}"/>
-                    <h:outputText value="#{usuarioController.selected.contrasenia}" title="#{bundle.ViewUsuarioTitle_contrasenia}"/>
                     <h:outputText value="#{bundle.ViewUsuarioLabel_activo}"/>
                     <h:outputText value="#{usuarioController.selected.activo}" title="#{bundle.ViewUsuarioTitle_activo}"/>
                     <h:outputText value="#{bundle.ViewUsuarioLabel_fechaCreacion}"/>
@@ -29,6 +27,8 @@
                     </h:outputText>
                     <h:outputText value="#{bundle.ViewUsuarioLabel_rolid}"/>
                     <h:outputText value="#{usuarioController.selected.rolid}" title="#{bundle.ViewUsuarioTitle_rolid}"/>
+                    <h:outputText value="#{bundle.ViewUsuarioLabel_rolname}"/>
+                    <h:outputText value="#{usuarioController.selected.rolid.nombre}" title="#{bundle.ViewUsuarioTitle_rolname}"/>
                 </h:panelGrid>
                 <br />
                 <h:commandLink action="#{usuarioController.destroyAndView}" value="#{bundle.ViewUsuarioDestroyLink}"/>

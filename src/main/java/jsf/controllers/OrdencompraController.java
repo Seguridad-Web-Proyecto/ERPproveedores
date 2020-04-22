@@ -1,9 +1,9 @@
-package jsf.clas;
+package jsf.controllers;
 
-import entidad.Pagoventa;
+import entidad.Ordencompra;
 import jsf.clas.util.JsfUtil;
 import jsf.clas.util.PaginationHelper;
-import bean.sesion.PagoventaFacade;
+import bean.sesion.OrdencompraFacade;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
@@ -18,29 +18,29 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
-@Named("pagoventaController")
+@Named("ordencompraController")
 @SessionScoped
-public class PagoventaController implements Serializable {
+public class OrdencompraController implements Serializable {
 
-    private Pagoventa current;
+    private Ordencompra current;
     private DataModel items = null;
     @EJB
-    private bean.sesion.PagoventaFacade ejbFacade;
+    private bean.sesion.OrdencompraFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
-    public PagoventaController() {
+    public OrdencompraController() {
     }
 
-    public Pagoventa getSelected() {
+    public Ordencompra getSelected() {
         if (current == null) {
-            current = new Pagoventa();
+            current = new Ordencompra();
             selectedItemIndex = -1;
         }
         return current;
     }
 
-    private PagoventaFacade getFacade() {
+    private OrdencompraFacade getFacade() {
         return ejbFacade;
     }
 
@@ -68,13 +68,13 @@ public class PagoventaController implements Serializable {
     }
 
     public String prepareView() {
-        current = (Pagoventa) getItems().getRowData();
+        current = (Ordencompra) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "View";
     }
 
     public String prepareCreate() {
-        current = new Pagoventa();
+        current = new Ordencompra();
         selectedItemIndex = -1;
         return "Create";
     }
@@ -82,7 +82,7 @@ public class PagoventaController implements Serializable {
     public String create() {
         try {
             getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("PagoventaCreated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("OrdencompraCreated"));
             return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -91,7 +91,7 @@ public class PagoventaController implements Serializable {
     }
 
     public String prepareEdit() {
-        current = (Pagoventa) getItems().getRowData();
+        current = (Ordencompra) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "Edit";
     }
@@ -99,7 +99,7 @@ public class PagoventaController implements Serializable {
     public String update() {
         try {
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("PagoventaUpdated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("OrdencompraUpdated"));
             return "View";
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -108,7 +108,7 @@ public class PagoventaController implements Serializable {
     }
 
     public String destroy() {
-        current = (Pagoventa) getItems().getRowData();
+        current = (Ordencompra) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
@@ -132,7 +132,7 @@ public class PagoventaController implements Serializable {
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("PagoventaDeleted"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("OrdencompraDeleted"));
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
         }
@@ -188,21 +188,21 @@ public class PagoventaController implements Serializable {
         return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
     }
 
-    public Pagoventa getPagoventa(java.lang.Long id) {
+    public Ordencompra getOrdencompra(java.lang.Long id) {
         return ejbFacade.find(id);
     }
 
-    @FacesConverter(forClass = Pagoventa.class)
-    public static class PagoventaControllerConverter implements Converter {
+    @FacesConverter(forClass = Ordencompra.class)
+    public static class OrdencompraControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            PagoventaController controller = (PagoventaController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "pagoventaController");
-            return controller.getPagoventa(getKey(value));
+            OrdencompraController controller = (OrdencompraController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "ordencompraController");
+            return controller.getOrdencompra(getKey(value));
         }
 
         java.lang.Long getKey(String value) {
@@ -222,11 +222,11 @@ public class PagoventaController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Pagoventa) {
-                Pagoventa o = (Pagoventa) object;
-                return getStringKey(o.getPagoventaid());
+            if (object instanceof Ordencompra) {
+                Ordencompra o = (Ordencompra) object;
+                return getStringKey(o.getOrdencompraid());
             } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Pagoventa.class.getName());
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Ordencompra.class.getName());
             }
         }
 

@@ -1,9 +1,9 @@
-package jsf.clas;
+package jsf.controllers;
 
-import entidad.Cliente;
+import entidad.Compradetalle;
 import jsf.clas.util.JsfUtil;
 import jsf.clas.util.PaginationHelper;
-import bean.sesion.ClienteFacade;
+import bean.sesion.CompradetalleFacade;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
@@ -18,29 +18,30 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
-@Named("clienteController")
+@Named("compradetalleController")
 @SessionScoped
-public class ClienteController implements Serializable {
+public class CompradetalleController implements Serializable {
 
-    private Cliente current;
+    private Compradetalle current;
     private DataModel items = null;
     @EJB
-    private bean.sesion.ClienteFacade ejbFacade;
+    private bean.sesion.CompradetalleFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
-    public ClienteController() {
+    public CompradetalleController() {
     }
 
-    public Cliente getSelected() {
+    public Compradetalle getSelected() {
         if (current == null) {
-            current = new Cliente();
+            current = new Compradetalle();
+            current.setCompradetallePK(new entidad.CompradetallePK());
             selectedItemIndex = -1;
         }
         return current;
     }
 
-    private ClienteFacade getFacade() {
+    private CompradetalleFacade getFacade() {
         return ejbFacade;
     }
 
@@ -68,21 +69,24 @@ public class ClienteController implements Serializable {
     }
 
     public String prepareView() {
-        current = (Cliente) getItems().getRowData();
+        current = (Compradetalle) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "View";
     }
 
     public String prepareCreate() {
-        current = new Cliente();
+        current = new Compradetalle();
+        current.setCompradetallePK(new entidad.CompradetallePK());
         selectedItemIndex = -1;
         return "Create";
     }
 
     public String create() {
         try {
+            current.getCompradetallePK().setCompraid(current.getOrdencompra().getOrdencompraid());
+            current.getCompradetallePK().setProductoid(current.getProducto().getProductoid());
             getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ClienteCreated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("CompradetalleCreated"));
             return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -91,15 +95,17 @@ public class ClienteController implements Serializable {
     }
 
     public String prepareEdit() {
-        current = (Cliente) getItems().getRowData();
+        current = (Compradetalle) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "Edit";
     }
 
     public String update() {
         try {
+            current.getCompradetallePK().setCompraid(current.getOrdencompra().getOrdencompraid());
+            current.getCompradetallePK().setProductoid(current.getProducto().getProductoid());
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ClienteUpdated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("CompradetalleUpdated"));
             return "View";
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -108,7 +114,7 @@ public class ClienteController implements Serializable {
     }
 
     public String destroy() {
-        current = (Cliente) getItems().getRowData();
+        current = (Compradetalle) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
@@ -132,7 +138,7 @@ public class ClienteController implements Serializable {
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ClienteDeleted"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("CompradetalleDeleted"));
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
         }
@@ -188,32 +194,40 @@ public class ClienteController implements Serializable {
         return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
     }
 
-    public Cliente getCliente(java.lang.Long id) {
+    public Compradetalle getCompradetalle(entidad.CompradetallePK id) {
         return ejbFacade.find(id);
     }
 
-    @FacesConverter(forClass = Cliente.class)
-    public static class ClienteControllerConverter implements Converter {
+    @FacesConverter(forClass = Compradetalle.class)
+    public static class CompradetalleControllerConverter implements Converter {
+
+        private static final String SEPARATOR = "#";
+        private static final String SEPARATOR_ESCAPED = "\\#";
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            ClienteController controller = (ClienteController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "clienteController");
-            return controller.getCliente(getKey(value));
+            CompradetalleController controller = (CompradetalleController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "compradetalleController");
+            return controller.getCompradetalle(getKey(value));
         }
 
-        java.lang.Long getKey(String value) {
-            java.lang.Long key;
-            key = Long.valueOf(value);
+        entidad.CompradetallePK getKey(String value) {
+            entidad.CompradetallePK key;
+            String values[] = value.split(SEPARATOR_ESCAPED);
+            key = new entidad.CompradetallePK();
+            key.setCompraid(Long.parseLong(values[0]));
+            key.setProductoid(Long.parseLong(values[1]));
             return key;
         }
 
-        String getStringKey(java.lang.Long value) {
+        String getStringKey(entidad.CompradetallePK value) {
             StringBuilder sb = new StringBuilder();
-            sb.append(value);
+            sb.append(value.getCompraid());
+            sb.append(SEPARATOR);
+            sb.append(value.getProductoid());
             return sb.toString();
         }
 
@@ -222,11 +236,11 @@ public class ClienteController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Cliente) {
-                Cliente o = (Cliente) object;
-                return getStringKey(o.getClienteid());
+            if (object instanceof Compradetalle) {
+                Compradetalle o = (Compradetalle) object;
+                return getStringKey(o.getCompradetallePK());
             } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Cliente.class.getName());
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Compradetalle.class.getName());
             }
         }
 

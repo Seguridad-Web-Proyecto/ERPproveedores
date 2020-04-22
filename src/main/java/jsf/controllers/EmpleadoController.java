@@ -1,9 +1,9 @@
-package jsf.clas;
+package jsf.controllers;
 
-import entidad.Ganancia;
+import entidad.Empleado;
 import jsf.clas.util.JsfUtil;
 import jsf.clas.util.PaginationHelper;
-import bean.sesion.GananciaFacade;
+import bean.sesion.EmpleadoFacade;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
@@ -18,29 +18,29 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
-@Named("gananciaController")
+@Named("empleadoController")
 @SessionScoped
-public class GananciaController implements Serializable {
+public class EmpleadoController implements Serializable {
 
-    private Ganancia current;
+    private Empleado current;
     private DataModel items = null;
     @EJB
-    private bean.sesion.GananciaFacade ejbFacade;
+    private bean.sesion.EmpleadoFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
-    public GananciaController() {
+    public EmpleadoController() {
     }
 
-    public Ganancia getSelected() {
+    public Empleado getSelected() {
         if (current == null) {
-            current = new Ganancia();
+            current = new Empleado();
             selectedItemIndex = -1;
         }
         return current;
     }
 
-    private GananciaFacade getFacade() {
+    private EmpleadoFacade getFacade() {
         return ejbFacade;
     }
 
@@ -68,13 +68,13 @@ public class GananciaController implements Serializable {
     }
 
     public String prepareView() {
-        current = (Ganancia) getItems().getRowData();
+        current = (Empleado) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "View";
     }
 
     public String prepareCreate() {
-        current = new Ganancia();
+        current = new Empleado();
         selectedItemIndex = -1;
         return "Create";
     }
@@ -82,7 +82,7 @@ public class GananciaController implements Serializable {
     public String create() {
         try {
             getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("GananciaCreated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EmpleadoCreated"));
             return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -91,7 +91,7 @@ public class GananciaController implements Serializable {
     }
 
     public String prepareEdit() {
-        current = (Ganancia) getItems().getRowData();
+        current = (Empleado) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "Edit";
     }
@@ -99,7 +99,7 @@ public class GananciaController implements Serializable {
     public String update() {
         try {
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("GananciaUpdated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EmpleadoUpdated"));
             return "View";
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -108,7 +108,7 @@ public class GananciaController implements Serializable {
     }
 
     public String destroy() {
-        current = (Ganancia) getItems().getRowData();
+        current = (Empleado) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
@@ -132,7 +132,7 @@ public class GananciaController implements Serializable {
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("GananciaDeleted"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EmpleadoDeleted"));
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
         }
@@ -188,21 +188,21 @@ public class GananciaController implements Serializable {
         return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
     }
 
-    public Ganancia getGanancia(java.lang.Long id) {
+    public Empleado getEmpleado(java.lang.Long id) {
         return ejbFacade.find(id);
     }
 
-    @FacesConverter(forClass = Ganancia.class)
-    public static class GananciaControllerConverter implements Converter {
+    @FacesConverter(forClass = Empleado.class)
+    public static class EmpleadoControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            GananciaController controller = (GananciaController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "gananciaController");
-            return controller.getGanancia(getKey(value));
+            EmpleadoController controller = (EmpleadoController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "empleadoController");
+            return controller.getEmpleado(getKey(value));
         }
 
         java.lang.Long getKey(String value) {
@@ -222,11 +222,11 @@ public class GananciaController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Ganancia) {
-                Ganancia o = (Ganancia) object;
-                return getStringKey(o.getGananciaid());
+            if (object instanceof Empleado) {
+                Empleado o = (Empleado) object;
+                return getStringKey(o.getEmpleadoid());
             } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Ganancia.class.getName());
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Empleado.class.getName());
             }
         }
 

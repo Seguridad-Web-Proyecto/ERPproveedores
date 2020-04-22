@@ -34,12 +34,6 @@
                         </h:column>
                         <h:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListUsuarioTitle_contrasenia}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.contrasenia}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
                                 <h:outputText value="#{bundle.ListUsuarioTitle_activo}"/>
                             </f:facet>
                             <h:outputText value="#{item.activo}"/>
@@ -57,6 +51,12 @@
                                 <h:outputText value="#{bundle.ListUsuarioTitle_rolid}"/>
                             </f:facet>
                             <h:outputText value="#{item.rolid}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListUsuarioTitle_rol_nombre}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.rolid.nombre}"/>                            
                         </h:column>
                         <h:column>
                             <f:facet name="header">

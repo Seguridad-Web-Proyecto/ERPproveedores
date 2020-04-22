@@ -1,9 +1,9 @@
-package jsf.clas;
+package jsf.controllers;
 
-import entidad.Tarjetacreditoventa;
+import entidad.Facturaventa;
 import jsf.clas.util.JsfUtil;
 import jsf.clas.util.PaginationHelper;
-import bean.sesion.TarjetacreditoventaFacade;
+import bean.sesion.FacturaventaFacade;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
@@ -18,29 +18,29 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
-@Named("tarjetacreditoventaController")
+@Named("facturaventaController")
 @SessionScoped
-public class TarjetacreditoventaController implements Serializable {
+public class FacturaventaController implements Serializable {
 
-    private Tarjetacreditoventa current;
+    private Facturaventa current;
     private DataModel items = null;
     @EJB
-    private bean.sesion.TarjetacreditoventaFacade ejbFacade;
+    private bean.sesion.FacturaventaFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
-    public TarjetacreditoventaController() {
+    public FacturaventaController() {
     }
 
-    public Tarjetacreditoventa getSelected() {
+    public Facturaventa getSelected() {
         if (current == null) {
-            current = new Tarjetacreditoventa();
+            current = new Facturaventa();
             selectedItemIndex = -1;
         }
         return current;
     }
 
-    private TarjetacreditoventaFacade getFacade() {
+    private FacturaventaFacade getFacade() {
         return ejbFacade;
     }
 
@@ -68,13 +68,13 @@ public class TarjetacreditoventaController implements Serializable {
     }
 
     public String prepareView() {
-        current = (Tarjetacreditoventa) getItems().getRowData();
+        current = (Facturaventa) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "View";
     }
 
     public String prepareCreate() {
-        current = new Tarjetacreditoventa();
+        current = new Facturaventa();
         selectedItemIndex = -1;
         return "Create";
     }
@@ -82,7 +82,7 @@ public class TarjetacreditoventaController implements Serializable {
     public String create() {
         try {
             getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("TarjetacreditoventaCreated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("FacturaventaCreated"));
             return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -91,7 +91,7 @@ public class TarjetacreditoventaController implements Serializable {
     }
 
     public String prepareEdit() {
-        current = (Tarjetacreditoventa) getItems().getRowData();
+        current = (Facturaventa) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "Edit";
     }
@@ -99,7 +99,7 @@ public class TarjetacreditoventaController implements Serializable {
     public String update() {
         try {
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("TarjetacreditoventaUpdated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("FacturaventaUpdated"));
             return "View";
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -108,7 +108,7 @@ public class TarjetacreditoventaController implements Serializable {
     }
 
     public String destroy() {
-        current = (Tarjetacreditoventa) getItems().getRowData();
+        current = (Facturaventa) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
@@ -132,7 +132,7 @@ public class TarjetacreditoventaController implements Serializable {
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("TarjetacreditoventaDeleted"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("FacturaventaDeleted"));
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
         }
@@ -188,21 +188,21 @@ public class TarjetacreditoventaController implements Serializable {
         return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
     }
 
-    public Tarjetacreditoventa getTarjetacreditoventa(java.lang.Long id) {
+    public Facturaventa getFacturaventa(java.lang.Long id) {
         return ejbFacade.find(id);
     }
 
-    @FacesConverter(forClass = Tarjetacreditoventa.class)
-    public static class TarjetacreditoventaControllerConverter implements Converter {
+    @FacesConverter(forClass = Facturaventa.class)
+    public static class FacturaventaControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            TarjetacreditoventaController controller = (TarjetacreditoventaController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "tarjetacreditoventaController");
-            return controller.getTarjetacreditoventa(getKey(value));
+            FacturaventaController controller = (FacturaventaController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "facturaventaController");
+            return controller.getFacturaventa(getKey(value));
         }
 
         java.lang.Long getKey(String value) {
@@ -222,11 +222,11 @@ public class TarjetacreditoventaController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Tarjetacreditoventa) {
-                Tarjetacreditoventa o = (Tarjetacreditoventa) object;
-                return getStringKey(o.getTarjetacreditoventaid());
+            if (object instanceof Facturaventa) {
+                Facturaventa o = (Facturaventa) object;
+                return getStringKey(o.getFacturaventaid());
             } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Tarjetacreditoventa.class.getName());
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Facturaventa.class.getName());
             }
         }
 

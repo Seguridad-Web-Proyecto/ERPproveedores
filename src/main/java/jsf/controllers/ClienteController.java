@@ -1,9 +1,9 @@
-package jsf.clas;
+package jsf.controllers;
 
-import entidad.Ordenventa;
+import entidad.Cliente;
 import jsf.clas.util.JsfUtil;
 import jsf.clas.util.PaginationHelper;
-import bean.sesion.OrdenventaFacade;
+import bean.sesion.ClienteFacade;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
@@ -18,29 +18,29 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
-@Named("ordenventaController")
+@Named("clienteController")
 @SessionScoped
-public class OrdenventaController implements Serializable {
+public class ClienteController implements Serializable {
 
-    private Ordenventa current;
+    private Cliente current;
     private DataModel items = null;
     @EJB
-    private bean.sesion.OrdenventaFacade ejbFacade;
+    private bean.sesion.ClienteFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
-    public OrdenventaController() {
+    public ClienteController() {
     }
 
-    public Ordenventa getSelected() {
+    public Cliente getSelected() {
         if (current == null) {
-            current = new Ordenventa();
+            current = new Cliente();
             selectedItemIndex = -1;
         }
         return current;
     }
 
-    private OrdenventaFacade getFacade() {
+    private ClienteFacade getFacade() {
         return ejbFacade;
     }
 
@@ -68,13 +68,13 @@ public class OrdenventaController implements Serializable {
     }
 
     public String prepareView() {
-        current = (Ordenventa) getItems().getRowData();
+        current = (Cliente) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "View";
     }
 
     public String prepareCreate() {
-        current = new Ordenventa();
+        current = new Cliente();
         selectedItemIndex = -1;
         return "Create";
     }
@@ -82,7 +82,7 @@ public class OrdenventaController implements Serializable {
     public String create() {
         try {
             getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("OrdenventaCreated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ClienteCreated"));
             return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -91,7 +91,7 @@ public class OrdenventaController implements Serializable {
     }
 
     public String prepareEdit() {
-        current = (Ordenventa) getItems().getRowData();
+        current = (Cliente) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "Edit";
     }
@@ -99,7 +99,7 @@ public class OrdenventaController implements Serializable {
     public String update() {
         try {
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("OrdenventaUpdated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ClienteUpdated"));
             return "View";
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -108,7 +108,7 @@ public class OrdenventaController implements Serializable {
     }
 
     public String destroy() {
-        current = (Ordenventa) getItems().getRowData();
+        current = (Cliente) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
@@ -132,7 +132,7 @@ public class OrdenventaController implements Serializable {
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("OrdenventaDeleted"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ClienteDeleted"));
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
         }
@@ -188,21 +188,21 @@ public class OrdenventaController implements Serializable {
         return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
     }
 
-    public Ordenventa getOrdenventa(java.lang.Long id) {
+    public Cliente getCliente(java.lang.Long id) {
         return ejbFacade.find(id);
     }
 
-    @FacesConverter(forClass = Ordenventa.class)
-    public static class OrdenventaControllerConverter implements Converter {
+    @FacesConverter(forClass = Cliente.class)
+    public static class ClienteControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            OrdenventaController controller = (OrdenventaController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "ordenventaController");
-            return controller.getOrdenventa(getKey(value));
+            ClienteController controller = (ClienteController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "clienteController");
+            return controller.getCliente(getKey(value));
         }
 
         java.lang.Long getKey(String value) {
@@ -222,11 +222,11 @@ public class OrdenventaController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Ordenventa) {
-                Ordenventa o = (Ordenventa) object;
-                return getStringKey(o.getOrdenventaid());
+            if (object instanceof Cliente) {
+                Cliente o = (Cliente) object;
+                return getStringKey(o.getClienteid());
             } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Ordenventa.class.getName());
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Cliente.class.getName());
             }
         }
 

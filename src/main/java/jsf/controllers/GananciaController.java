@@ -1,9 +1,9 @@
-package jsf.clas;
+package jsf.controllers;
 
-import entidad.Tarjetacreditocompra;
+import entidad.Ganancia;
 import jsf.clas.util.JsfUtil;
 import jsf.clas.util.PaginationHelper;
-import bean.sesion.TarjetacreditocompraFacade;
+import bean.sesion.GananciaFacade;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
@@ -18,29 +18,29 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
-@Named("tarjetacreditocompraController")
+@Named("gananciaController")
 @SessionScoped
-public class TarjetacreditocompraController implements Serializable {
+public class GananciaController implements Serializable {
 
-    private Tarjetacreditocompra current;
+    private Ganancia current;
     private DataModel items = null;
     @EJB
-    private bean.sesion.TarjetacreditocompraFacade ejbFacade;
+    private bean.sesion.GananciaFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
-    public TarjetacreditocompraController() {
+    public GananciaController() {
     }
 
-    public Tarjetacreditocompra getSelected() {
+    public Ganancia getSelected() {
         if (current == null) {
-            current = new Tarjetacreditocompra();
+            current = new Ganancia();
             selectedItemIndex = -1;
         }
         return current;
     }
 
-    private TarjetacreditocompraFacade getFacade() {
+    private GananciaFacade getFacade() {
         return ejbFacade;
     }
 
@@ -68,13 +68,13 @@ public class TarjetacreditocompraController implements Serializable {
     }
 
     public String prepareView() {
-        current = (Tarjetacreditocompra) getItems().getRowData();
+        current = (Ganancia) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "View";
     }
 
     public String prepareCreate() {
-        current = new Tarjetacreditocompra();
+        current = new Ganancia();
         selectedItemIndex = -1;
         return "Create";
     }
@@ -82,7 +82,7 @@ public class TarjetacreditocompraController implements Serializable {
     public String create() {
         try {
             getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("TarjetacreditocompraCreated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("GananciaCreated"));
             return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -91,7 +91,7 @@ public class TarjetacreditocompraController implements Serializable {
     }
 
     public String prepareEdit() {
-        current = (Tarjetacreditocompra) getItems().getRowData();
+        current = (Ganancia) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "Edit";
     }
@@ -99,7 +99,7 @@ public class TarjetacreditocompraController implements Serializable {
     public String update() {
         try {
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("TarjetacreditocompraUpdated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("GananciaUpdated"));
             return "View";
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -108,7 +108,7 @@ public class TarjetacreditocompraController implements Serializable {
     }
 
     public String destroy() {
-        current = (Tarjetacreditocompra) getItems().getRowData();
+        current = (Ganancia) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
@@ -132,7 +132,7 @@ public class TarjetacreditocompraController implements Serializable {
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("TarjetacreditocompraDeleted"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("GananciaDeleted"));
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
         }
@@ -188,21 +188,21 @@ public class TarjetacreditocompraController implements Serializable {
         return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
     }
 
-    public Tarjetacreditocompra getTarjetacreditocompra(java.lang.Long id) {
+    public Ganancia getGanancia(java.lang.Long id) {
         return ejbFacade.find(id);
     }
 
-    @FacesConverter(forClass = Tarjetacreditocompra.class)
-    public static class TarjetacreditocompraControllerConverter implements Converter {
+    @FacesConverter(forClass = Ganancia.class)
+    public static class GananciaControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            TarjetacreditocompraController controller = (TarjetacreditocompraController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "tarjetacreditocompraController");
-            return controller.getTarjetacreditocompra(getKey(value));
+            GananciaController controller = (GananciaController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "gananciaController");
+            return controller.getGanancia(getKey(value));
         }
 
         java.lang.Long getKey(String value) {
@@ -222,11 +222,11 @@ public class TarjetacreditocompraController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Tarjetacreditocompra) {
-                Tarjetacreditocompra o = (Tarjetacreditocompra) object;
-                return getStringKey(o.getTarjetacreditocompraid());
+            if (object instanceof Ganancia) {
+                Ganancia o = (Ganancia) object;
+                return getStringKey(o.getGananciaid());
             } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Tarjetacreditocompra.class.getName());
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Ganancia.class.getName());
             }
         }
 

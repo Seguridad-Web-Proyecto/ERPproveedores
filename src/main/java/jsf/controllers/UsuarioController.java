@@ -1,11 +1,14 @@
-package jsf.clas;
+package jsf.controllers;
 
-import entidad.Ventadetalle;
+import entidad.Usuario;
 import jsf.clas.util.JsfUtil;
 import jsf.clas.util.PaginationHelper;
-import bean.sesion.VentadetalleFacade;
+import bean.sesion.UsuarioFacade;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -18,30 +21,30 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
-@Named("ventadetalleController")
+@Named("usuarioController")
 @SessionScoped
-public class VentadetalleController implements Serializable {
+public class UsuarioController implements Serializable {
 
-    private Ventadetalle current;
+    private Usuario current;
     private DataModel items = null;
     @EJB
-    private bean.sesion.VentadetalleFacade ejbFacade;
+    private bean.sesion.UsuarioFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
-
-    public VentadetalleController() {
+    private final List<String> activoValues = Arrays.asList("true", "false");
+    
+    public UsuarioController() {
     }
 
-    public Ventadetalle getSelected() {
+    public Usuario getSelected() {
         if (current == null) {
-            current = new Ventadetalle();
-            current.setVentadetallePK(new entidad.VentadetallePK());
+            current = new Usuario();
             selectedItemIndex = -1;
         }
         return current;
     }
 
-    private VentadetalleFacade getFacade() {
+    private UsuarioFacade getFacade() {
         return ejbFacade;
     }
 
@@ -69,24 +72,22 @@ public class VentadetalleController implements Serializable {
     }
 
     public String prepareView() {
-        current = (Ventadetalle) getItems().getRowData();
+        current = (Usuario) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "View";
     }
 
     public String prepareCreate() {
-        current = new Ventadetalle();
-        current.setVentadetallePK(new entidad.VentadetallePK());
+        current = new Usuario();
         selectedItemIndex = -1;
         return "Create";
     }
 
     public String create() {
         try {
-            current.getVentadetallePK().setProductoid(current.getProducto().getProductoid());
-            current.getVentadetallePK().setVentaid(current.getOrdenventa().getOrdenventaid());
+            current.setFechaCreacion(new Date());
             getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("VentadetalleCreated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("UsuarioCreated"));
             return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -95,17 +96,15 @@ public class VentadetalleController implements Serializable {
     }
 
     public String prepareEdit() {
-        current = (Ventadetalle) getItems().getRowData();
+        current = (Usuario) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "Edit";
     }
 
     public String update() {
         try {
-            current.getVentadetallePK().setProductoid(current.getProducto().getProductoid());
-            current.getVentadetallePK().setVentaid(current.getOrdenventa().getOrdenventaid());
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("VentadetalleUpdated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("UsuarioUpdated"));
             return "View";
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -114,7 +113,7 @@ public class VentadetalleController implements Serializable {
     }
 
     public String destroy() {
-        current = (Ventadetalle) getItems().getRowData();
+        current = (Usuario) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
@@ -138,7 +137,7 @@ public class VentadetalleController implements Serializable {
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("VentadetalleDeleted"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("UsuarioDeleted"));
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
         }
@@ -157,6 +156,10 @@ public class VentadetalleController implements Serializable {
         if (selectedItemIndex >= 0) {
             current = getFacade().findRange(new int[]{selectedItemIndex, selectedItemIndex + 1}).get(0);
         }
+    }
+
+    public List<String> getActivoValues() {
+        return activoValues;
     }
 
     public DataModel getItems() {
@@ -194,40 +197,32 @@ public class VentadetalleController implements Serializable {
         return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
     }
 
-    public Ventadetalle getVentadetalle(entidad.VentadetallePK id) {
+    public Usuario getUsuario(java.lang.Long id) {
         return ejbFacade.find(id);
     }
 
-    @FacesConverter(forClass = Ventadetalle.class)
-    public static class VentadetalleControllerConverter implements Converter {
-
-        private static final String SEPARATOR = "#";
-        private static final String SEPARATOR_ESCAPED = "\\#";
+    @FacesConverter(forClass = Usuario.class)
+    public static class UsuarioControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            VentadetalleController controller = (VentadetalleController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "ventadetalleController");
-            return controller.getVentadetalle(getKey(value));
+            UsuarioController controller = (UsuarioController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "usuarioController");
+            return controller.getUsuario(getKey(value));
         }
 
-        entidad.VentadetallePK getKey(String value) {
-            entidad.VentadetallePK key;
-            String values[] = value.split(SEPARATOR_ESCAPED);
-            key = new entidad.VentadetallePK();
-            key.setVentaid(Long.parseLong(values[0]));
-            key.setProductoid(Long.parseLong(values[1]));
+        java.lang.Long getKey(String value) {
+            java.lang.Long key;
+            key = Long.valueOf(value);
             return key;
         }
 
-        String getStringKey(entidad.VentadetallePK value) {
+        String getStringKey(java.lang.Long value) {
             StringBuilder sb = new StringBuilder();
-            sb.append(value.getVentaid());
-            sb.append(SEPARATOR);
-            sb.append(value.getProductoid());
+            sb.append(value);
             return sb.toString();
         }
 
@@ -236,11 +231,11 @@ public class VentadetalleController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Ventadetalle) {
-                Ventadetalle o = (Ventadetalle) object;
-                return getStringKey(o.getVentadetallePK());
+            if (object instanceof Usuario) {
+                Usuario o = (Usuario) object;
+                return getStringKey(o.getUsuarioid());
             } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Ventadetalle.class.getName());
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Usuario.class.getName());
             }
         }
 

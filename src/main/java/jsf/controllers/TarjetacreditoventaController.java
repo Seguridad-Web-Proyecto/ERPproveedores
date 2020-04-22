@@ -1,9 +1,9 @@
-package jsf.clas;
+package jsf.controllers;
 
-import entidad.Compradetalle;
+import entidad.Tarjetacreditoventa;
 import jsf.clas.util.JsfUtil;
 import jsf.clas.util.PaginationHelper;
-import bean.sesion.CompradetalleFacade;
+import bean.sesion.TarjetacreditoventaFacade;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
@@ -18,30 +18,29 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
-@Named("compradetalleController")
+@Named("tarjetacreditoventaController")
 @SessionScoped
-public class CompradetalleController implements Serializable {
+public class TarjetacreditoventaController implements Serializable {
 
-    private Compradetalle current;
+    private Tarjetacreditoventa current;
     private DataModel items = null;
     @EJB
-    private bean.sesion.CompradetalleFacade ejbFacade;
+    private bean.sesion.TarjetacreditoventaFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
-    public CompradetalleController() {
+    public TarjetacreditoventaController() {
     }
 
-    public Compradetalle getSelected() {
+    public Tarjetacreditoventa getSelected() {
         if (current == null) {
-            current = new Compradetalle();
-            current.setCompradetallePK(new entidad.CompradetallePK());
+            current = new Tarjetacreditoventa();
             selectedItemIndex = -1;
         }
         return current;
     }
 
-    private CompradetalleFacade getFacade() {
+    private TarjetacreditoventaFacade getFacade() {
         return ejbFacade;
     }
 
@@ -69,24 +68,21 @@ public class CompradetalleController implements Serializable {
     }
 
     public String prepareView() {
-        current = (Compradetalle) getItems().getRowData();
+        current = (Tarjetacreditoventa) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "View";
     }
 
     public String prepareCreate() {
-        current = new Compradetalle();
-        current.setCompradetallePK(new entidad.CompradetallePK());
+        current = new Tarjetacreditoventa();
         selectedItemIndex = -1;
         return "Create";
     }
 
     public String create() {
         try {
-            current.getCompradetallePK().setCompraid(current.getOrdencompra().getOrdencompraid());
-            current.getCompradetallePK().setProductoid(current.getProducto().getProductoid());
             getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("CompradetalleCreated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("TarjetacreditoventaCreated"));
             return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -95,17 +91,15 @@ public class CompradetalleController implements Serializable {
     }
 
     public String prepareEdit() {
-        current = (Compradetalle) getItems().getRowData();
+        current = (Tarjetacreditoventa) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "Edit";
     }
 
     public String update() {
         try {
-            current.getCompradetallePK().setCompraid(current.getOrdencompra().getOrdencompraid());
-            current.getCompradetallePK().setProductoid(current.getProducto().getProductoid());
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("CompradetalleUpdated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("TarjetacreditoventaUpdated"));
             return "View";
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -114,7 +108,7 @@ public class CompradetalleController implements Serializable {
     }
 
     public String destroy() {
-        current = (Compradetalle) getItems().getRowData();
+        current = (Tarjetacreditoventa) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
@@ -138,7 +132,7 @@ public class CompradetalleController implements Serializable {
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("CompradetalleDeleted"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("TarjetacreditoventaDeleted"));
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
         }
@@ -194,40 +188,32 @@ public class CompradetalleController implements Serializable {
         return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
     }
 
-    public Compradetalle getCompradetalle(entidad.CompradetallePK id) {
+    public Tarjetacreditoventa getTarjetacreditoventa(java.lang.Long id) {
         return ejbFacade.find(id);
     }
 
-    @FacesConverter(forClass = Compradetalle.class)
-    public static class CompradetalleControllerConverter implements Converter {
-
-        private static final String SEPARATOR = "#";
-        private static final String SEPARATOR_ESCAPED = "\\#";
+    @FacesConverter(forClass = Tarjetacreditoventa.class)
+    public static class TarjetacreditoventaControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            CompradetalleController controller = (CompradetalleController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "compradetalleController");
-            return controller.getCompradetalle(getKey(value));
+            TarjetacreditoventaController controller = (TarjetacreditoventaController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "tarjetacreditoventaController");
+            return controller.getTarjetacreditoventa(getKey(value));
         }
 
-        entidad.CompradetallePK getKey(String value) {
-            entidad.CompradetallePK key;
-            String values[] = value.split(SEPARATOR_ESCAPED);
-            key = new entidad.CompradetallePK();
-            key.setCompraid(Long.parseLong(values[0]));
-            key.setProductoid(Long.parseLong(values[1]));
+        java.lang.Long getKey(String value) {
+            java.lang.Long key;
+            key = Long.valueOf(value);
             return key;
         }
 
-        String getStringKey(entidad.CompradetallePK value) {
+        String getStringKey(java.lang.Long value) {
             StringBuilder sb = new StringBuilder();
-            sb.append(value.getCompraid());
-            sb.append(SEPARATOR);
-            sb.append(value.getProductoid());
+            sb.append(value);
             return sb.toString();
         }
 
@@ -236,11 +222,11 @@ public class CompradetalleController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Compradetalle) {
-                Compradetalle o = (Compradetalle) object;
-                return getStringKey(o.getCompradetallePK());
+            if (object instanceof Tarjetacreditoventa) {
+                Tarjetacreditoventa o = (Tarjetacreditoventa) object;
+                return getStringKey(o.getTarjetacreditoventaid());
             } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Compradetalle.class.getName());
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Tarjetacreditoventa.class.getName());
             }
         }
 
