@@ -1,6 +1,6 @@
 package jsf.controllers;
 
-import entidad.Usuariosw;
+import entidades.Usuariosw;
 import jsf.clas.util.JsfUtil;
 import jsf.clas.util.PaginationHelper;
 import bean.sesion.UsuarioswFacade;

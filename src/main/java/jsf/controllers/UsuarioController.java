@@ -1,6 +1,6 @@
 package jsf.controllers;
 
-import entidad.Usuario;
+import entidades.Usuario;
 import jsf.clas.util.JsfUtil;
 import jsf.clas.util.PaginationHelper;
 import bean.sesion.UsuarioFacade;
@@ -158,7 +158,7 @@ public class UsuarioController implements Serializable {
         }
     }
 
-    public List<String> getActivoValues() {
+    private List<String> getActivoValues() {
         return activoValues;
     }
 

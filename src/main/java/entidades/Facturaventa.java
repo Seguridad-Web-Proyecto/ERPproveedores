@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entidad;
+package entidades;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -31,21 +31,21 @@ import javax.validation.constraints.Size;
  * @author Saul
  */
 @Entity
-@Table(name = "facturacompra")
+@Table(name = "facturaventa")
 @NamedQueries({
-    @NamedQuery(name = "Facturacompra.findAll", query = "SELECT f FROM Facturacompra f"),
-    @NamedQuery(name = "Facturacompra.findByFacturacompraid", query = "SELECT f FROM Facturacompra f WHERE f.facturacompraid = :facturacompraid"),
-    @NamedQuery(name = "Facturacompra.findByFechaEmision", query = "SELECT f FROM Facturacompra f WHERE f.fechaEmision = :fechaEmision"),
-    @NamedQuery(name = "Facturacompra.findByFechaVencimientoPago", query = "SELECT f FROM Facturacompra f WHERE f.fechaVencimientoPago = :fechaVencimientoPago"),
-    @NamedQuery(name = "Facturacompra.findByDescripcion", query = "SELECT f FROM Facturacompra f WHERE f.descripcion = :descripcion")})
-public class Facturacompra implements Serializable {
+    @NamedQuery(name = "Facturaventa.findAll", query = "SELECT f FROM Facturaventa f"),
+    @NamedQuery(name = "Facturaventa.findByFacturaventaid", query = "SELECT f FROM Facturaventa f WHERE f.facturaventaid = :facturaventaid"),
+    @NamedQuery(name = "Facturaventa.findByFechaEmision", query = "SELECT f FROM Facturaventa f WHERE f.fechaEmision = :fechaEmision"),
+    @NamedQuery(name = "Facturaventa.findByFechaVencimientoPago", query = "SELECT f FROM Facturaventa f WHERE f.fechaVencimientoPago = :fechaVencimientoPago"),
+    @NamedQuery(name = "Facturaventa.findByDescripcion", query = "SELECT f FROM Facturaventa f WHERE f.descripcion = :descripcion")})
+public class Facturaventa implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "facturacompraid")
-    private Long facturacompraid;
+    @Column(name = "facturaventaid")
+    private Long facturaventaid;
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_emision")
@@ -61,32 +61,32 @@ public class Facturacompra implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "descripcion")
     private String descripcion;
-    @JoinColumn(name = "pagoid", referencedColumnName = "pagocompraid")
+    @JoinColumn(name = "pagoid", referencedColumnName = "pagoventaid")
     @ManyToOne(optional = false)
-    private Pagocompra pagoid;
+    private Pagoventa pagoid;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "facturaid")
-    private Collection<Ordencompra> ordencompraCollection;
+    private Collection<Ordenventa> ordenventaCollection;
 
-    public Facturacompra() {
+    public Facturaventa() {
     }
 
-    public Facturacompra(Long facturacompraid) {
-        this.facturacompraid = facturacompraid;
+    public Facturaventa(Long facturaventaid) {
+        this.facturaventaid = facturaventaid;
     }
 
-    public Facturacompra(Long facturacompraid, Date fechaEmision, Date fechaVencimientoPago, String descripcion) {
-        this.facturacompraid = facturacompraid;
+    public Facturaventa(Long facturaventaid, Date fechaEmision, Date fechaVencimientoPago, String descripcion) {
+        this.facturaventaid = facturaventaid;
         this.fechaEmision = fechaEmision;
         this.fechaVencimientoPago = fechaVencimientoPago;
         this.descripcion = descripcion;
     }
 
-    public Long getFacturacompraid() {
-        return facturacompraid;
+    public Long getFacturaventaid() {
+        return facturaventaid;
     }
 
-    public void setFacturacompraid(Long facturacompraid) {
-        this.facturacompraid = facturacompraid;
+    public void setFacturaventaid(Long facturaventaid) {
+        this.facturaventaid = facturaventaid;
     }
 
     public Date getFechaEmision() {
@@ -113,37 +113,37 @@ public class Facturacompra implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public Pagocompra getPagoid() {
+    public Pagoventa getPagoid() {
         return pagoid;
     }
 
-    public void setPagoid(Pagocompra pagoid) {
+    public void setPagoid(Pagoventa pagoid) {
         this.pagoid = pagoid;
     }
 
-    public Collection<Ordencompra> getOrdencompraCollection() {
-        return ordencompraCollection;
+    public Collection<Ordenventa> getOrdenventaCollection() {
+        return ordenventaCollection;
     }
 
-    public void setOrdencompraCollection(Collection<Ordencompra> ordencompraCollection) {
-        this.ordencompraCollection = ordencompraCollection;
+    public void setOrdenventaCollection(Collection<Ordenventa> ordenventaCollection) {
+        this.ordenventaCollection = ordenventaCollection;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (facturacompraid != null ? facturacompraid.hashCode() : 0);
+        hash += (facturaventaid != null ? facturaventaid.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Facturacompra)) {
+        if (!(object instanceof Facturaventa)) {
             return false;
         }
-        Facturacompra other = (Facturacompra) object;
-        if ((this.facturacompraid == null && other.facturacompraid != null) || (this.facturacompraid != null && !this.facturacompraid.equals(other.facturacompraid))) {
+        Facturaventa other = (Facturaventa) object;
+        if ((this.facturaventaid == null && other.facturaventaid != null) || (this.facturaventaid != null && !this.facturaventaid.equals(other.facturaventaid))) {
             return false;
         }
         return true;
@@ -151,7 +151,7 @@ public class Facturacompra implements Serializable {
 
     @Override
     public String toString() {
-        return "entidad.Facturacompra[ facturacompraid=" + facturacompraid + " ]";
+        return "entidad.Facturaventa[ facturaventaid=" + facturaventaid + " ]";
     }
     
 }

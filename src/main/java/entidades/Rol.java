@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entidad;
+package entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
@@ -20,6 +21,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -31,6 +34,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Rol.findAll", query = "SELECT r FROM Rol r"),
     @NamedQuery(name = "Rol.findByRolid", query = "SELECT r FROM Rol r WHERE r.rolid = :rolid"),
     @NamedQuery(name = "Rol.findByNombre", query = "SELECT r FROM Rol r WHERE r.nombre = :nombre")})
+@XmlRootElement
 public class Rol implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,6 +48,7 @@ public class Rol implements Serializable {
     @Size(min = 1, max = 20)
     @Column(name = "nombre")
     private String nombre;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rolid")
     private Collection<Usuario> usuarioCollection;
 
@@ -75,6 +80,7 @@ public class Rol implements Serializable {
         this.nombre = nombre;
     }
 
+    @XmlTransient
     public Collection<Usuario> getUsuarioCollection() {
         return usuarioCollection;
     }

@@ -1,6 +1,6 @@
 package jsf.controllers;
 
-import entidad.Rol;
+import entidades.Rol;
 import jsf.clas.util.JsfUtil;
 import jsf.clas.util.PaginationHelper;
 import bean.sesion.RolFacade;

@@ -1,6 +1,6 @@
 package jsf.controllers;
 
-import entidad.Facturacompra;
+import entidades.Facturacompra;
 import jsf.clas.util.JsfUtil;
 import jsf.clas.util.PaginationHelper;
 import bean.sesion.FacturacompraFacade;

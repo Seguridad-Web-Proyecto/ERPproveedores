@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entidad;
+package entidades;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -31,21 +31,21 @@ import javax.validation.constraints.Size;
  * @author Saul
  */
 @Entity
-@Table(name = "pagocompra")
+@Table(name = "pagoventa")
 @NamedQueries({
-    @NamedQuery(name = "Pagocompra.findAll", query = "SELECT p FROM Pagocompra p"),
-    @NamedQuery(name = "Pagocompra.findByPagocompraid", query = "SELECT p FROM Pagocompra p WHERE p.pagocompraid = :pagocompraid"),
-    @NamedQuery(name = "Pagocompra.findByFechaPago", query = "SELECT p FROM Pagocompra p WHERE p.fechaPago = :fechaPago"),
-    @NamedQuery(name = "Pagocompra.findByMonto", query = "SELECT p FROM Pagocompra p WHERE p.monto = :monto"),
-    @NamedQuery(name = "Pagocompra.findByEstado", query = "SELECT p FROM Pagocompra p WHERE p.estado = :estado")})
-public class Pagocompra implements Serializable {
+    @NamedQuery(name = "Pagoventa.findAll", query = "SELECT p FROM Pagoventa p"),
+    @NamedQuery(name = "Pagoventa.findByPagoventaid", query = "SELECT p FROM Pagoventa p WHERE p.pagoventaid = :pagoventaid"),
+    @NamedQuery(name = "Pagoventa.findByFechaPago", query = "SELECT p FROM Pagoventa p WHERE p.fechaPago = :fechaPago"),
+    @NamedQuery(name = "Pagoventa.findByMonto", query = "SELECT p FROM Pagoventa p WHERE p.monto = :monto"),
+    @NamedQuery(name = "Pagoventa.findByEstado", query = "SELECT p FROM Pagoventa p WHERE p.estado = :estado")})
+public class Pagoventa implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "pagocompraid")
-    private Long pagocompraid;
+    @Column(name = "pagoventaid")
+    private Long pagoventaid;
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_pago")
@@ -60,32 +60,32 @@ public class Pagocompra implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "estado")
     private String estado;
-    @JoinColumn(name = "tarjetacreditoid", referencedColumnName = "tarjetacreditocompraid")
-    @ManyToOne(optional = false)
-    private Tarjetacreditocompra tarjetacreditoid;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pagoid")
-    private Collection<Facturacompra> facturacompraCollection;
+    private Collection<Facturaventa> facturaventaCollection;
+    @JoinColumn(name = "tarjetacreditoid", referencedColumnName = "tarjetacreditoventaid")
+    @ManyToOne(optional = false)
+    private Tarjetacreditoventa tarjetacreditoid;
 
-    public Pagocompra() {
+    public Pagoventa() {
     }
 
-    public Pagocompra(Long pagocompraid) {
-        this.pagocompraid = pagocompraid;
+    public Pagoventa(Long pagoventaid) {
+        this.pagoventaid = pagoventaid;
     }
 
-    public Pagocompra(Long pagocompraid, Date fechaPago, long monto, String estado) {
-        this.pagocompraid = pagocompraid;
+    public Pagoventa(Long pagoventaid, Date fechaPago, long monto, String estado) {
+        this.pagoventaid = pagoventaid;
         this.fechaPago = fechaPago;
         this.monto = monto;
         this.estado = estado;
     }
 
-    public Long getPagocompraid() {
-        return pagocompraid;
+    public Long getPagoventaid() {
+        return pagoventaid;
     }
 
-    public void setPagocompraid(Long pagocompraid) {
-        this.pagocompraid = pagocompraid;
+    public void setPagoventaid(Long pagoventaid) {
+        this.pagoventaid = pagoventaid;
     }
 
     public Date getFechaPago() {
@@ -112,37 +112,37 @@ public class Pagocompra implements Serializable {
         this.estado = estado;
     }
 
-    public Tarjetacreditocompra getTarjetacreditoid() {
+    public Collection<Facturaventa> getFacturaventaCollection() {
+        return facturaventaCollection;
+    }
+
+    public void setFacturaventaCollection(Collection<Facturaventa> facturaventaCollection) {
+        this.facturaventaCollection = facturaventaCollection;
+    }
+
+    public Tarjetacreditoventa getTarjetacreditoid() {
         return tarjetacreditoid;
     }
 
-    public void setTarjetacreditoid(Tarjetacreditocompra tarjetacreditoid) {
+    public void setTarjetacreditoid(Tarjetacreditoventa tarjetacreditoid) {
         this.tarjetacreditoid = tarjetacreditoid;
-    }
-
-    public Collection<Facturacompra> getFacturacompraCollection() {
-        return facturacompraCollection;
-    }
-
-    public void setFacturacompraCollection(Collection<Facturacompra> facturacompraCollection) {
-        this.facturacompraCollection = facturacompraCollection;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (pagocompraid != null ? pagocompraid.hashCode() : 0);
+        hash += (pagoventaid != null ? pagoventaid.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Pagocompra)) {
+        if (!(object instanceof Pagoventa)) {
             return false;
         }
-        Pagocompra other = (Pagocompra) object;
-        if ((this.pagocompraid == null && other.pagocompraid != null) || (this.pagocompraid != null && !this.pagocompraid.equals(other.pagocompraid))) {
+        Pagoventa other = (Pagoventa) object;
+        if ((this.pagoventaid == null && other.pagoventaid != null) || (this.pagoventaid != null && !this.pagoventaid.equals(other.pagoventaid))) {
             return false;
         }
         return true;
@@ -150,7 +150,7 @@ public class Pagocompra implements Serializable {
 
     @Override
     public String toString() {
-        return "entidad.Pagocompra[ pagocompraid=" + pagocompraid + " ]";
+        return "entidad.Pagoventa[ pagoventaid=" + pagoventaid + " ]";
     }
     
 }

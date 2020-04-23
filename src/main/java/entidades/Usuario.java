@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entidad;
+package entidades;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -25,6 +25,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -39,6 +41,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Usuario.findByContrasenia", query = "SELECT u FROM Usuario u WHERE u.contrasenia = :contrasenia"),
     @NamedQuery(name = "Usuario.findByActivo", query = "SELECT u FROM Usuario u WHERE u.activo = :activo"),
     @NamedQuery(name = "Usuario.findByFechaCreacion", query = "SELECT u FROM Usuario u WHERE u.fechaCreacion = :fechaCreacion")})
+@XmlRootElement
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -127,6 +130,7 @@ public class Usuario implements Serializable {
         this.fechaCreacion = fechaCreacion;
     }
 
+    @XmlTransient
     public Collection<Empleado> getEmpleadoCollection() {
         return empleadoCollection;
     }

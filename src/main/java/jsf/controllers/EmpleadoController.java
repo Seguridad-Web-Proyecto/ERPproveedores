@@ -1,6 +1,6 @@
 package jsf.controllers;
 
-import entidad.Empleado;
+import entidades.Empleado;
 import jsf.clas.util.JsfUtil;
 import jsf.clas.util.PaginationHelper;
 import bean.sesion.EmpleadoFacade;

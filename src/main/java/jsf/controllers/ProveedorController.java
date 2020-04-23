@@ -1,6 +1,6 @@
 package jsf.controllers;
 
-import entidad.Proveedor;
+import entidades.Proveedor;
 import jsf.clas.util.JsfUtil;
 import jsf.clas.util.PaginationHelper;
 import bean.sesion.ProveedorFacade;

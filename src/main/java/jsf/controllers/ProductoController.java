@@ -1,6 +1,6 @@
 package jsf.controllers;
 
-import entidad.Producto;
+import entidades.Producto;
 import jsf.clas.util.JsfUtil;
 import jsf.clas.util.PaginationHelper;
 import bean.sesion.ProductoFacade;
