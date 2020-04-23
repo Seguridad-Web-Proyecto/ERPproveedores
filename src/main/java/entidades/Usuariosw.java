@@ -151,7 +151,7 @@ public class Usuariosw implements Serializable {
 
     @Override
     public String toString() {
-        return "entidad.Usuariosw[ usuarioid=" + usuarioid + " ]";
+        return "UsuarioSW[id=" + usuarioid + ", usuario: "+usuario+"]";
     }
     
 }

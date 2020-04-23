@@ -112,7 +112,7 @@ public class Rol implements Serializable {
 
     @Override
     public String toString() {
-        return "entidad.Rol[ rolid=" + rolid + " ]";
+        return "Rol[ id: " + rolid + ", descripción: "+nombre+"]";
     }
     
 }

@@ -5,7 +5,7 @@
  */
 package restapplication.service;
 
-import entidades.Rol;
+import entidades.Producto;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -25,54 +25,54 @@ import javax.ws.rs.core.MediaType;
  * @author jcami
  */
 @Stateless
-@Path("roles")
-public class RolFacadeREST extends AbstractFacade<Rol> {
+@Path("productos")
+public class ProductoFacadeREST extends AbstractFacade<Producto> {
 
     @PersistenceContext(unitName = "com.mycompany_Proveedoressw_war_1.0-SNAPSHOTPU")
     private EntityManager em;
 
-    public RolFacadeREST() {
-        super(Rol.class);
+    public ProductoFacadeREST() {
+        super(Producto.class);
     }
 
     @POST
     @Override
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(Rol entity) {
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void create(Producto entity) {
         super.create(entity);
     }
 
     @PUT
     @Path("{id}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Integer id, Rol entity) {
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void edit(@PathParam("id") Long id, Producto entity) {
         super.edit(entity);
     }
 
     @DELETE
     @Path("{id}")
-    public void remove(@PathParam("id") Integer id) {
+    public void remove(@PathParam("id") Long id) {
         super.remove(super.find(id));
     }
 
     @GET
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Rol find(@PathParam("id") Integer id) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Producto find(@PathParam("id") Long id) {
         return super.find(id);
     }
 
     @GET
     @Override
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Rol> findAll() {
+    public List<Producto> findAll() {
         return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Rol> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Producto> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
 

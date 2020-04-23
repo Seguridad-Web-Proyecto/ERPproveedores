@@ -5,7 +5,7 @@
  */
 package restapplication.service;
 
-import entidades.Usuario;
+import entidades.Categoria;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -25,27 +25,27 @@ import javax.ws.rs.core.MediaType;
  * @author jcami
  */
 @Stateless
-@Path("usuarios")
-public class UsuarioFacadeREST extends AbstractFacade<Usuario> {
+@Path("categorias")
+public class CategoriaFacadeREST extends AbstractFacade<Categoria> {
 
     @PersistenceContext(unitName = "com.mycompany_Proveedoressw_war_1.0-SNAPSHOTPU")
     private EntityManager em;
 
-    public UsuarioFacadeREST() {
-        super(Usuario.class);
+    public CategoriaFacadeREST() {
+        super(Categoria.class);
     }
 
     @POST
     @Override
     @Consumes(MediaType.APPLICATION_JSON)
-    public void create(Usuario entity) {
+    public void create(Categoria entity) {
         super.create(entity);
     }
 
     @PUT
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void edit(@PathParam("id") Long id, Usuario entity) {
+    public void edit(@PathParam("id") Long id, Categoria entity) {
         super.edit(entity);
     }
 
@@ -58,21 +58,21 @@ public class UsuarioFacadeREST extends AbstractFacade<Usuario> {
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Usuario find(@PathParam("id") Long id) {
+    public Categoria find(@PathParam("id") Long id) {
         return super.find(id);
     }
 
     @GET
     @Override
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Usuario> findAll() {
+    public List<Categoria> findAll() {
         return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Usuario> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+    public List<Categoria> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
 
