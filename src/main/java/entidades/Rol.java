@@ -8,6 +8,7 @@ package entidades;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Collection;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -80,7 +81,7 @@ public class Rol implements Serializable {
         this.nombre = nombre;
     }
 
-    @XmlTransient
+    @JsonbTransient
     public Collection<Usuario> getUsuarioCollection() {
         return usuarioCollection;
     }

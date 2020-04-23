@@ -8,6 +8,7 @@ package entidades;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -131,6 +132,7 @@ public class Usuario implements Serializable {
     }
 
     @XmlTransient
+    @JsonbTransient
     public Collection<Empleado> getEmpleadoCollection() {
         return empleadoCollection;
     }
