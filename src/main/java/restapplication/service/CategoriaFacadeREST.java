@@ -35,26 +35,6 @@ public class CategoriaFacadeREST extends AbstractFacade<Categoria> {
         super(Categoria.class);
     }
 
-    @POST
-    @Override
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void create(Categoria entity) {
-        super.create(entity);
-    }
-
-    @PUT
-    @Path("{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void edit(@PathParam("id") Long id, Categoria entity) {
-        super.edit(entity);
-    }
-
-    @DELETE
-    @Path("{id}")
-    public void remove(@PathParam("id") Long id) {
-        super.remove(super.find(id));
-    }
-
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)

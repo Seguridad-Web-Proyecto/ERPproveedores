@@ -5,7 +5,7 @@
  */
 package restapplication.service;
 
-import entidades.Producto;
+import entidades.Pagoventa;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -25,34 +25,41 @@ import javax.ws.rs.core.MediaType;
  * @author jcami
  */
 @Stateless
-@Path("productos")
-public class ProductoFacadeREST extends AbstractFacade<Producto> {
+@Path("pagos")
+public class PagoventaFacadeREST extends AbstractFacade<Pagoventa> {
 
     @PersistenceContext(unitName = "com.mycompany_Proveedoressw_war_1.0-SNAPSHOTPU")
     private EntityManager em;
 
-    public ProductoFacadeREST() {
-        super(Producto.class);
+    public PagoventaFacadeREST() {
+        super(Pagoventa.class);
+    }
+
+    @POST
+    @Override
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void create(Pagoventa entity) {
+        super.create(entity);
     }
 
     @GET
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Producto find(@PathParam("id") Long id) {
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Pagoventa find(@PathParam("id") Long id) {
         return super.find(id);
     }
 
     @GET
     @Override
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Producto> findAll() {
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Pagoventa> findAll() {
         return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Producto> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Pagoventa> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
 

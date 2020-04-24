@@ -5,7 +5,7 @@
  */
 package restapplication.service;
 
-import entidades.Producto;
+import entidades.Facturaventa;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -25,34 +25,54 @@ import javax.ws.rs.core.MediaType;
  * @author jcami
  */
 @Stateless
-@Path("productos")
-public class ProductoFacadeREST extends AbstractFacade<Producto> {
+@Path("facturas")
+public class FacturaventaFacadeREST extends AbstractFacade<Facturaventa> {
 
     @PersistenceContext(unitName = "com.mycompany_Proveedoressw_war_1.0-SNAPSHOTPU")
     private EntityManager em;
 
-    public ProductoFacadeREST() {
-        super(Producto.class);
+    public FacturaventaFacadeREST() {
+        super(Facturaventa.class);
+    }
+
+    @POST
+    @Override
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void create(Facturaventa entity) {
+        super.create(entity);
+    }
+
+    @PUT
+    @Path("{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void edit(@PathParam("id") Long id, Facturaventa entity) {
+        super.edit(entity);
+    }
+
+    @DELETE
+    @Path("{id}")
+    public void remove(@PathParam("id") Long id) {
+        super.remove(super.find(id));
     }
 
     @GET
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Producto find(@PathParam("id") Long id) {
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Facturaventa find(@PathParam("id") Long id) {
         return super.find(id);
     }
 
     @GET
     @Override
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Producto> findAll() {
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Facturaventa> findAll() {
         return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Producto> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Facturaventa> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
 
