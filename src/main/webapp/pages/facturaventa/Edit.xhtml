@@ -34,7 +34,7 @@
                             </h:inputText>
                             <h:outputLabel value="Fecha de vencimiento de pago: " for="fechaVencimientoPago" />
                             <h:inputText class="form-control" id="fechaVencimientoPago" value="#{facturaventaController.selected.fechaVencimientoPago}" title="#{bundle.EditFacturaventaTitle_fechaVencimientoPago}" required="true" requiredMessage="#{bundle.EditFacturaventaRequiredMessage_fechaVencimientoPago}">
-                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                                   <f:converter converterId="dateConverter"/>
                                 <f:validator validatorId="fechaValidator" />
 
                             </h:inputText>
